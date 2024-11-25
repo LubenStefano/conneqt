@@ -1,0 +1,42 @@
+/* footer */
+footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    min-height: 8vh;
+    background-color: #363540;
+    color: white;
+    bottom: 0;
+    width: 100%;
+    margin-top: 100px;
+}
+.footer-link{
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "Offside", sans-serif;
+    margin: 0 10px;
+    list-style: none;
+    cursor: pointer;
+    border-radius: 20px;
+    position: relative;
+}
+.footer-link a{
+    text-decoration: none;
+    color: #ffffff;
+    position: relative;
+}
+.footer-link a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px; 
+    width: 0;
+    height: 2px; 
+    background-color: #ffffff;
+    transition: width 0.3s ease; 
+}
+.footer-link a:hover::after {
+    width: 100%;
+}
