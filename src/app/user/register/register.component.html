@@ -1,1 +1,45 @@
 <p>register works!</p>
+<main>
+    <section id="register">
+      <div class="register-box">
+        <div class="register-header">
+          <fa-icon [icon]="faUser"></fa-icon>
+          <h1>register</h1>
+        </div>
+        <div class="register-form">
+          <form action="">
+            <div class="input-box">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Username"
+              />
+              <label for="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Password"
+              />
+              <label for="password">Repeat password</label>
+              <input
+                type="rePassword"
+                name="rePassword"
+                id="rePassword"
+                placeholder="Password"
+              />
+            <p id="register-call">
+              <i>Already have an account ?</i>
+              <span><a href="/login">Login now</a></span>
+              </p>
+              <button type="submit" id="register-button">register</button>
+            </div>
+          </form>
+        </div>
+  
+      </div>
+    </section>
+  </main>
+  

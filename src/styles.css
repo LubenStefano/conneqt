@@ -4,7 +4,7 @@
     padding: 0;
     box-sizing: border-box;
     scroll-behavior: smooth;
-
+}
     /* Apply custom scrollbar styles */
 ::-webkit-scrollbar {
     width: 8px; 
@@ -26,11 +26,12 @@
     border-radius: 10px;
 }
 
-}
-
 fa-icon{
-    cursor: pointer;
     font-size: 25px;
     color: #363540;
-    transition: color 0.3s ease;
+    transition: ease-in-out 0.3s;
+}
+.icon-interactive:hover{
+    cursor: pointer;
+    color: #9a9a9a;
 }

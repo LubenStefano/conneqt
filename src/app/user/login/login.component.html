@@ -1,1 +1,36 @@
-<p>login works!</p>
+<main>
+  <section id="login">
+    <div class="login-box">
+      <div class="login-header">
+        <fa-icon [icon]="faUser"></fa-icon>
+        <h1>login</h1>
+      </div>
+      <div class="login-form">
+        <form action="">
+          <div class="input-box">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+            />
+            <label for="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+            />
+          <p id="register-call">
+            <i>Doesn't have an account yet?</i>
+            <span><a href="/register">Register now</a></span>
+            </p>
+            <button type="submit" id="login-button">login</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </section>
+</main>

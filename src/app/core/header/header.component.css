@@ -10,6 +10,7 @@ nav{
     position: fixed;
     width: 100%;
     z-index: 1000;
+    top: 0;
 }
 #logo{
     font-family: "Pacifico", cursive;
@@ -17,6 +18,14 @@ nav{
     font-style: normal;
     font-size: 40px;
     cursor: pointer;
+    transition: 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+#logo a{
+    text-decoration: none;
+    color: #ffffff;
+}
+#logo:hover {
+    transform: scale(1.1); /* Slight zoom effect */
 }
 #nav-links{
     display: flex;
@@ -34,11 +43,17 @@ nav{
     border-radius: 20px;
     position: relative;
 }
-.nav-link a{
+.nav-link a {
     text-decoration: none;
     color: #ffffff;
     position: relative;
+    font-size: 20px;
 }
+
+.nav-link a:hover {
+    background-position: left; /* Slide gradient to the right */
+}
+
 .nav-link a::after {
     content: '';
     position: absolute;
