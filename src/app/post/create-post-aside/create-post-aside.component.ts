@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserBadgeComponent } from '../main/user-badge/user-badge.component';
+import { UserBadgeComponent } from '../../user/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faImage,
