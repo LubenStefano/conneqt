@@ -1,0 +1,30 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # Specify the branch to trigger deployment (you can use `master` or any branch you're pushing to)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Specify the node version you want to use
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the Angular project
+        run: npm run build -- --configuration production
+
+      - name: Deploy to GitHub Pages
+        run: npx angular-cli-ghpages --dir=docs  # Deploy the content of the docs folder
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
