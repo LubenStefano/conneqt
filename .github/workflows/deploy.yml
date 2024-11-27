@@ -3,28 +3,28 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Specify the branch to trigger deployment (you can use `master` or any branch you're pushing to)
+      - main  # Trigger deployment when changes are pushed to the 'main' branch
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2  # Checkout the code from the repo
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # Specify the node version you want to use
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Specify the Node.js version for the build
 
-      - name: Install dependencies
-        run: npm install
+    - name: Install dependencies
+      run: npm install  # Install project dependencies
 
-      - name: Build the Angular project
-        run: npm run build -- --configuration production
+    - name: Build the Angular project
+      run: npm run build --configuration production  # Build the Angular project for production
 
-      - name: Deploy to GitHub Pages
-        run: npx angular-cli-ghpages --dir=docs  # Deploy the content of the docs folder
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
+    - name: Deploy to GitHub Pages
+      run: npx angular-cli-ghpages --dir=dist/conneqt  # Deploy the contents of the dist/conneqt folder
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token is automatically provided for authentication
