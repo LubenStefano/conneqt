@@ -3,6 +3,7 @@ import { CreatePostAsideComponent } from '../post/create-post-aside/create-post-
 import { SavedPostsAsideComponent } from '../post/saved-posts-aside/saved-posts-aside.component';
 import { PostFlowComponent } from '../post/post-flow/post-flow.component';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -12,6 +13,6 @@ import { PostFlowComponent } from '../post/post-flow/post-flow.component';
     PostFlowComponent,
   ],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  styleUrls: ['./home.component.css'],
 })
 export class HomeComponent {}

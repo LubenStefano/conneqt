@@ -1,45 +1,79 @@
-<p>register works!</p>
 <main>
-    <section id="register">
-      <div class="register-box">
-        <div class="register-header">
-          <fa-icon [icon]="faUser"></fa-icon>
-          <h1>register</h1>
+  <section id="register">
+    <div class="register-box">
+      <div class="register-header">
+        <fa-icon [icon]="faUser"></fa-icon>
+        <h1>Register</h1>
+        @if(errorMessages){
+        <div class="error-box">
+          <p>{{errorMessages}}</p>
         </div>
-        <div class="register-form">
-          <form action="">
-            <div class="input-box">
-              <label for="username">Username</label>
-              <input
-                type="text"
-                name="username"
-                id="username"
-                placeholder="Username"
-              />
-              <label for="password">Password</label>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Password"
-              />
-              <label for="password">Repeat password</label>
-              <input
-                type="rePassword"
-                name="rePassword"
-                id="rePassword"
-                placeholder="Password"
-              />
-            <p id="register-call">
-              <i>Already have an account ?</i>
-              <span><a href="/login">Login now</a></span>
-              </p>
-              <button type="submit" id="register-button">register</button>
-            </div>
-          </form>
-        </div>
-  
+        }
       </div>
-    </section>
-  </main>
-  
+      <div class="register-form">
+        <form #form="ngForm" (ngSubmit)="register(form)">
+          <div class="input-box">
+
+            
+            <label for="username">Username</label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+              required
+              ngModel
+              #username="ngModel"
+            />
+
+           
+            <label for="email">Email</label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              required
+              email
+              ngModel
+              #email="ngModel"
+            />
+
+           
+            <label for="password">Password</label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              required
+              ngModel
+              #password="ngModel"
+            />
+
+           
+            <label for="rePassword">Confirm Password</label>
+            <input
+              type="password"
+              name="rePassword"
+              id="rePassword"
+              placeholder="Confirm Password"
+              required
+              ngModel
+              #rePassword="ngModel"
+            />
+
+            
+            <p id="register-call">
+              <i>Already have an account?</i>
+              <span><a routerLink="/login">Login now</a></span>
+            </p>
+
+            <!-- Submit Button -->
+            <button type="submit" id="register-button">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>

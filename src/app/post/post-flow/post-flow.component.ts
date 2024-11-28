@@ -25,6 +25,7 @@ export class PostFlowComponent implements OnInit {
   faBookmark = faBookmark;
 
   posts: Post[] = [];
+  user = "";
 
   constructor(private postService: PostService) {}
 
@@ -32,7 +33,6 @@ export class PostFlowComponent implements OnInit {
     // Fetch all posts
     this.postService.getPosts().subscribe((posts) => {
       this.posts = posts;
-      console.log('Fetched posts:', this.posts);
     });
   }
   

@@ -1,0 +1,15 @@
+main{
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+}
+.profile-page{
+    margin-top: 100px;
+    width: 60%;
+    padding: 50px;
+}
+.flow-options{
+    display: flex;
+    justify-content:space-evenly;
+    margin-bottom: 20px;
+}

@@ -3,10 +3,13 @@
         <span id="logo"><a href="home">Conneqt</a></span>
         <ul id="nav-links">
             <li class="nav-link"><a href="home">Home</a></li>
-            <li class="nav-link"><a href="about.html">My Profile</a></li>
-            <li class="nav-link"><a href="login">Login</a></li>
-            <li class="nav-link"><a href="register">Register</a></li>
-            <li class="nav-link"><a href="contact.html">Logout</a></li>
+            @if(user){
+                <li class="nav-link"><a href="profile">My Profile</a></li>
+                <li class="nav-link"><a href="#" (click)="onLogout()" >Logout</a></li>
+            }@else {
+                <li class="nav-link"><a href="login">Login</a></li>
+                <li class="nav-link"><a href="register">Register</a></li>
+            }
         </ul>
     </nav>
     </header>

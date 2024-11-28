@@ -3,34 +3,52 @@
     <div class="login-box">
       <div class="login-header">
         <fa-icon [icon]="faUser"></fa-icon>
-        <h1>login</h1>
+        <h1>Login</h1>
+        @if(errorMessages){
+          <div class="error-box">
+            <p>{{errorMessages}}</p>
+          </div>
+          }
       </div>
       <div class="login-form">
-        <form action="">
+        <form #form="ngForm" (ngSubmit)="login(form)">
           <div class="input-box">
-            <label for="username">Username</label>
+
+           
+            <label for="email">Email</label>
             <input
-              type="text"
-              name="username"
-              id="username"
-              placeholder="Username"
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Email"
+              required
+              ngModel
+              #email="ngModel"
             />
+
+           
             <label for="password">Password</label>
             <input
               type="password"
               name="password"
               id="password"
               placeholder="Password"
+              required
+              ngModel
+              #password="ngModel"
             />
-          <p id="register-call">
-            <i>Doesn't have an account yet?</i>
-            <span><a href="/register">Register now</a></span>
+
+            <p id="login-call">
+              <i>Don't have an account yet?</i>
+              <span><a routerLink="/register">Register now</a></span>
             </p>
-            <button type="submit" id="login-button">login</button>
+
+            <button type="submit" id="login-button">
+              Login
+            </button>
           </div>
         </form>
       </div>
-
     </div>
   </section>
 </main>
