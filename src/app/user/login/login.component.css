@@ -1,117 +1,117 @@
-#login{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
+#login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
 }
-.login-header{
-    position: relative;
-    bottom: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.login-header {
+  position: relative;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.login-header h1{
-    font-size: 40px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    color: #363540;
+.login-header h1 {
+  font-size: 40px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  color: #363540;
 }
-.login-header fa-icon{
-    padding: 20px 25px 20px 25px;
-    margin-bottom: 30px;
-    border-radius: 50%;
-    border: #363540 3px solid;
-    font-size: 50px;
-    background-color: white;
-    color: #363540;
+.login-header fa-icon {
+  padding: 20px 25px 20px 25px;
+  margin-bottom: 30px;
+  border-radius: 50%;
+  border: #363540 3px solid;
+  font-size: 50px;
+  background-color: white;
+  color: #363540;
 }
-.login-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: #363540 3px solid;
-    border-radius: 15px;
-    margin-top: 15px;
-    width: 25%;
-    transition: 0.2s ease-in-out;
+.login-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: #363540 3px solid;
+  border-radius: 15px;
+  margin-top: 15px;
+  width: 25%;
+  transition: 0.2s ease-in-out;
 }
-.login-box:focus-within{
-box-shadow: 10px 10px 15px rgba(101, 99, 117, 0.952);
+.login-box:focus-within {
+  box-shadow: 10px 10px 15px rgba(101, 99, 117, 0.952);
 }
 
-.input-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
+.input-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
 }
-.input-box label{
-    font-size: 20px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    margin: 10px 0;
+.input-box label {
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  margin: 10px 0;
 }
-.input-box input{
-    width: 100%;
-    margin: 0 10px 10px 10px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #363540;
-    outline: none;
+.input-box input {
+  width: 100%;
+  margin: 0 10px 10px 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #363540;
+  outline: none;
 }
-.input-box input:focus{
-    border: 2px solid #363540;
+.input-box input:focus {
+  border: 2px solid #363540;
 }
-.input-box fa-icon{
-    font-size: 25px;
+.input-box fa-icon {
+  font-size: 25px;
 }
-.login-buttons button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
+.login-buttons button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
 }
-#register-call{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
+#register-call {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
-#register-call a{
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    color: #363540;
-    text-decoration: none;
-    margin-left: 10px;
-    transition: 0.1s ease-in-out;
+#register-call a {
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  color: #363540;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: 0.1s ease-in-out;
 }
-#register-call a:hover{
-    color: #9a9a9a;
+#register-call a:hover {
+  color: #9a9a9a;
 }
-#login-button{
-    background-color: #363540;
-    color: white;
-    border: none;
-    padding: 10px 50px;
-    border-radius: 5px;
-    font-size: 20px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
+#login-button {
+  background-color: #363540;
+  color: white;
+  border: none;
+  padding: 10px 50px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
-#login-button:hover{
-    background-color: #b5b5b5;
-    color: #363540;
+#login-button:hover {
+  background-color: #b5b5b5;
+  color: #363540;
 }
-.error-message{
-    color: red;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    margin-top: 10px;
+.error-message {
+  color: red;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  margin-top: 10px;
 }
