@@ -9,7 +9,7 @@
         }
         <div class="cp-body">
             <div id="cp-user">
-            <app-user-badge [username]="username"></app-user-badge>
+            <app-user-badge [username]="username" [userPfp]="userPfp"></app-user-badge>
         </div>
             <div class="cp-form">
                 <form #form="ngForm" (ngSubmit)="createPost(form)">

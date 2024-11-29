@@ -25,6 +25,7 @@ export class CreatePostAsideComponent implements OnInit {
 
   username = "";
   userId = "";
+  userPfp = "";
   errorMessage = "";
 
   constructor(private userService: UserService, private postService: PostService) {}
@@ -33,6 +34,7 @@ export class CreatePostAsideComponent implements OnInit {
     this.userService.getUser().subscribe((user) => {
       this.username = user?.displayName || '';
       this.userId = user?.uid || '';
+      this.userPfp = user?.photoURL!;
     });
   }
 
@@ -48,11 +50,11 @@ export class CreatePostAsideComponent implements OnInit {
     const post = {
       content: form.value.postContent,
       userId: this.userId,
-
+      img: '',
     };
 
     // Call the service to create the post
-    this.postService.createPost(post.content, post.userId)  // Replace 'userId' with actual user ID
+    this.postService.createPost(post.content, post.userId, post.img)  // Replace 'userId' with actual user ID
       .subscribe({
         next: (createdPost) => {
           console.log('Post created:', createdPost);

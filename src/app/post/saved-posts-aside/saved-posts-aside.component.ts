@@ -17,10 +17,12 @@ export class SavedPostsAsideComponent implements OnInit {
   faBookmark = faBookmark;
   faXmark = faXmarkCircle;
   username = '';
+  userPfp = '';
 
   ngOnInit() {
     this.userService.getUser().subscribe((user) => {
       this.username = user?.displayName || '';
+      this.userPfp = user?.photoURL!;
     });
   }
 }

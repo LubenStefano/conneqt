@@ -10,6 +10,5 @@ import { Component, Input} from '@angular/core';
 })
 export class UserBadgeComponent {
   @Input() username: string = '';
-
-  
+  @Input() userPfp: string = '';
 }

@@ -3,7 +3,7 @@
         @for (post of posts; track $index) {
            <div class="post">
             <div class="upper-header">
-                <app-user-badge></app-user-badge>
+                <app-user-badge [username]="post.username" [userPfp]="post.userPfp" ></app-user-badge>
                 <div class="post-time">
                     <span>{{post.date}}</span>
                 </div>

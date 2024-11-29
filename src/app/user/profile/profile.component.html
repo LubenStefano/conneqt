@@ -1,18 +1,58 @@
 <main>
-<div class="profile-page">
+  <div class="profile-page">
     <div class="profile-container">
-        <app-user-badge></app-user-badge>
+      <app-user-badge
+        [username]="username"
+        [userPfp]="userPfp"
+        id="user-info-profile"
+      ></app-user-badge>
+      <button class="edit-profile">edit</button>
     </div>
     <div class="flow-options">
-        <span id="view-posts">posts</span>
-        <span id="view-saved">saved</span>
+      <span id="view-posts" (click)="postFlow()" [appFlowHighlight]="flow === 'posts'" >posts</span>
+      <span id="view-saved" (click)="postSaved()" [appFlowHighlight]="flow === 'saved'" >saved</span>
     </div>
-    <hr>
-    <div class="flow">
-        <!-- user posts flow -->
-    </div>
-    <div class="saved">
+    <hr/>
+    <div class="profile-flow">
+      @if(flow === 'posts'){
+        @if(posts.length === 0){
+          <div class="no-posts">
+            <p>no posts yet</p>
+          </div>
+        }@else{
+      <div class="flow">
+        @for(post of posts; track $index){
+            <div class="post">
+                <div class="upper-header">
+                    <app-user-badge [username]="username" [userPfp]="userPfp" ></app-user-badge>
+                    <div class="post-time">
+                        <span>{{post.date}}</span>
+                    </div>
+                </div>
+                <div class="post-box">
+                    <div class="post-content">
+                        <!-- check if there is an image -->
+                        <p>{{post.content}}</p>
+                        @if(post.img) {
+                            <img src="{{post.img}}" alt="img">
+                        }
+                    </div>
+                    <div class="post-actions">
+                        <fa-icon [icon]="faShare" class="share-icon icon-interactive"></fa-icon>
+                        <fa-icon [icon]="faComment" class="comment-icon icon-interactive"></fa-icon>
+                        <fa-icon [icon]="faHeart" class="heart-icon icon-interactive"></fa-icon>
+                        <fa-icon [icon]="faBookmark" class="bookmark-icon icon-interactive"></fa-icon>
+                    </div>
+                </div>
+            </div>   
+        }
+      </div>
+    }
+      }@else {
+      <div class="saved">
         <!-- user saved flow -->
+      </div>
+      }
     </div>
-</div>
+  </div>
 </main>
