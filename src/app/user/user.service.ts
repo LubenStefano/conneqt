@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, updateProfile, User, signOut, onAuthStateChanged, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { Observable, BehaviorSubject, from, map } from 'rxjs';
+import { doc, docData, DocumentReference, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { Observable, BehaviorSubject, from, of } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

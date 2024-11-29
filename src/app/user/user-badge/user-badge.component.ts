@@ -8,4 +8,7 @@ import { Component, Input} from '@angular/core';
   templateUrl: './user-badge.component.html',
   styleUrls: ['./user-badge.component.css']
 })
-export class UserBadgeComponent {}
+export class UserBadgeComponent {
+  @Input() username: string = '';
+  @Input() userPfp: string = '';
+}
