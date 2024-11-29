@@ -7,16 +7,21 @@
         @if(errorMessage){
         <div class="errorMessage">{{errorMessage}}</div>
         }
+        @if(errorMessage){
+        <div class="errorMessage">{{errorMessage}}</div>
+        }
         <div class="cp-body">
             <div id="cp-user">
-            <app-user-badge [username]="username"></app-user-badge>
+            <app-user-badge [username]="username" [username]="username" [userPfp]="userPfp"></app-user-badge>
         </div>
             <div class="cp-form">
                 <form #form="ngForm" (ngSubmit)="createPost(form)">
                     <textarea name="postContent" #postContent="ngModel" ngModel id="postContent" cols="30" rows="10" required placeholder="Write here..."></textarea>
+                <form #form="ngForm" (ngSubmit)="createPost(form)">
+                    <textarea name="postContent" #postContent="ngModel" ngModel id="postContent" cols="30" rows="10" required placeholder="Write here..."></textarea>
                     <div class="cp-buttons">
-                        <button><fa-icon [icon]="faImage" class="image-icon icon-interactive"></fa-icon></button>
-                        <button><fa-icon [icon]="faArrow" class="arrow-icon icon-interactive"></fa-icon></button>
+                        <button><button><fa-icon [icon]="faImage" class="image-icon icon-interactive"></fa-icon></button></button>
+                        <button><button><fa-icon [icon]="faArrow" class="arrow-icon icon-interactive"></fa-icon></button></button>
                     </div>
                 </form>
             </div>

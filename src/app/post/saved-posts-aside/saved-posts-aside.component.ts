@@ -16,11 +16,4 @@ export class SavedPostsAsideComponent implements OnInit {
   constructor(private userService: UserService) {}
   faBookmark = faBookmark;
   faXmark = faXmarkCircle;
-  username = '';
-
-  ngOnInit() {
-    this.userService.getUser().subscribe((user) => {
-      this.username = user?.displayName || '';
-    });
-  }
 }
