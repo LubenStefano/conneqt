@@ -7,5 +7,4 @@ export interface Post {
   date: string
   likes: string[];
   comments: string[];
-  
 }
