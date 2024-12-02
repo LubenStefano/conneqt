@@ -1,25 +1,60 @@
 <aside>
-    <section id="create-post">
-        <div class="cp-header">
-            <fa-icon [icon]="faPlus"></fa-icon>
-            <h3>create post</h3>
-        </div>
-        @if(errorMessage){
-        <div class="errorMessage">{{errorMessage}}</div>
-        }
-        <div class="cp-body">
-            <div id="cp-user">
-            <app-user-badge [username]="username" [userPfp]="userPfp"></app-user-badge>
-        </div>
-            <div class="cp-form">
-                <form #form="ngForm" (ngSubmit)="createPost(form)">
-                    <textarea name="postContent" #postContent="ngModel" ngModel id="postContent" cols="30" rows="10" required placeholder="Write here..."></textarea>
-                    <div class="cp-buttons">
-                        <button><fa-icon [icon]="faImage" class="image-icon icon-interactive"></fa-icon></button>
-                        <button><fa-icon [icon]="faArrow" class="arrow-icon icon-interactive"></fa-icon></button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
+  <section id="create-post">
+    <div class="cp-header">
+      <fa-icon [icon]="faPlus"></fa-icon>
+      <h3>Create Post</h3>
+    </div>
+
+    @if(errorMessage) {
+      <div class="error-message">{{ errorMessage }}</div>
+    }
+
+    <div class="cp-body">
+      <div id="cp-user">
+        <app-user-badge [username]="username" [userPfp]="userPfp"></app-user-badge>
+      </div>
+
+      <div class="cp-form">
+        <form #form="ngForm" (ngSubmit)="createPost(form)">
+          <textarea
+            name="postContent"
+            #postContent="ngModel"
+            ngModel
+            id="postContent"
+            cols="30"
+            rows="10"
+            required
+            placeholder="Write here...">
+          </textarea>
+          <div class="cp-buttons">
+            <button type="button" (click)="fileInput.click()">
+              <fa-icon [icon]="faImage" class="image-icon icon-interactive"></fa-icon>
+            </button>
+            <button type="submit" [disabled]="!form.valid">
+              <fa-icon [icon]="faArrow" class="arrow-icon icon-interactive"></fa-icon>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <input
+    type="file"
+    #fileInput
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    style="display: none;"
+  />
+
+  @if(showCropper) {
+    <div class="cropper-modal">
+      <app-image-cropper
+        [imageChangedEvent]="selectedFileEvent"
+        (imageCropped)="onImageCropped($event)"
+        (cropSaved)="onCropSaved()"
+        (cropCancelled)="onCropCancelled()">
+      </app-image-cropper>
+    </div>
+  }
 </aside>

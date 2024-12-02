@@ -4,7 +4,8 @@ export interface Post {
   content: string;
   img?: string;
   creator: DocumentReference; 
-  date: string
+  date: string;
   likes: string[];
   comments: string[];
+  createdAt: Date;
 }
