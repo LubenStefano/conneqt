@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs } from '@angular/fire/firestore';
-import { from, map, Observable, tap } from 'rxjs';
+import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy } from '@angular/fire/firestore';
+import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
+import { from, Observable, throwError } from 'rxjs';
 import { Post } from '../types/post';
+import { limit } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +14,37 @@ export class PostService {
 
   getPosts(): Observable<Post[]> {
     const postsCollection = collection(this.firestore, 'post');
-    return collectionData(postsCollection, { idField: '_id' }) as Observable<Post[]>;
+    const postsQuery = query(
+      postsCollection,
+      orderBy('createdAt', 'desc'),  // Order by 'createdAt' in descending order (newest first)
+      limit(100)  // Limit the results to 100 posts
+    );
+    return collectionData(postsQuery, { idField: '_id' }).pipe(
+      map((posts) => posts as Post[])
+    );
+  }
+
+  uploadImageToFirebase(base64Image: string): Observable<string> {
+    if (!base64Image) {
+      return throwError(() => new Error('No image provided'));
+    }
+
+    try {
+      const storage = getStorage();
+      const fileName = `images/${Date.now()}.png`;
+      const storageRef = ref(storage, fileName);
+
+      return from(uploadString(storageRef, base64Image, 'data_url')).pipe(
+        switchMap(() => getDownloadURL(storageRef)),
+        catchError(error => {
+          console.error('Upload failed:', error);
+          return throwError(() => new Error('Failed to upload image'));
+        })
+      );
+    } catch (error) {
+      console.error('Image processing failed:', error);
+      return throwError(() => new Error('Failed to process image'));
+    }
   }
 
   createPost(content: string, creatorId: string, img?: string): Observable<Post> {
@@ -25,6 +58,7 @@ export class PostService {
       date,
       likes: [],
       comments: [],
+      createdAt: new Date(),
     };
 
     if (img) {
@@ -44,30 +78,26 @@ export class PostService {
 
   getPostsByUser(userId: string): Observable<Post[]> {
     const postsCollection = collection(this.firestore, 'post');
-    
-    // Create a reference to the user's document in Firestore
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    
-    // Query to fetch posts where the creator matches the user's reference
-    const q = query(postsCollection, where('creator', '==', userDocRef));
-    
+    const postsQuery = query(postsCollection, where('creator', '==', userDocRef));
+
     return new Observable<Post[]>((observer) => {
-      getDocs(q)
+      getDocs(postsQuery)
         .then((querySnapshot) => {
           const posts: Post[] = querySnapshot.docs.map((doc) => {
             const data = doc.data() as Post;
             return {
               ...data,
-              _id: doc.id, // add document ID to each post
+              _id: doc.id,
             };
           });
-          observer.next(posts); // Emit posts to the subscriber
-          observer.complete(); // Complete the observable
+          observer.next(posts);
+          observer.complete();
         })
         .catch((error) => {
           console.error('Error fetching posts for user:', error);
-          observer.next([]); // Emit empty array if error occurs
-          observer.complete(); // Complete the observable
+          observer.next([]);
+          observer.complete();
         });
     });
   }

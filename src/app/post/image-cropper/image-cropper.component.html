@@ -1,0 +1,22 @@
+<div class="image-cropper-container">
+    @if(imageChangedEvent) {
+      <div class="popup-overlay">
+        <div class="popup-container">
+          <div class="cropper-section">
+            <image-cropper
+            [imageChangedEvent]="imageChangedEvent"
+            [maintainAspectRatio]="true"
+            [aspectRatio]="1 / 1"
+            [resizeToWidth]="256"
+            (imageCropped)="onImageCropped($event)">
+          </image-cropper>
+  
+            <div class="actions">
+              <button (click)="saveCroppedImage()" class="btn-save">Save</button>
+              <button (click)="cancelCropper()" class="btn-cancel">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
