@@ -86,3 +86,94 @@ main{
     display: flex;
     justify-content: space-between;
 }
+.heart-icon {
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+
+  .liked {
+    color: red; 
+    animation: like-animation 0.4s ease-in-out;
+  }
+  
+  @keyframes like-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1); 
+    }
+  }
+  
+  .changing {
+    transition: none; 
+  }
+
+  .bookmark-icon {
+    transition: color 0.2s ease;
+    cursor: pointer;
+    color: #262626;
+  }
+  
+  .bookmark-icon.saved {
+    color: #f6d100;
+    animation: save-animation 0.4s ease-in-out;
+  }
+@keyframes save-animation {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(-10deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(10deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(-10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+
+.copy-popup {
+    position: absolute;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    bottom: 100%;
+    left: 70%;
+    transform: translateX(-50%);
+    animation: fadeInOut 1s ease-in-out;
+    white-space: nowrap;
+  }
+  
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(10px);
+    }
+    15% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    85% {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+  }
+  
+  .post-actions {
+    position: relative;
+  }
