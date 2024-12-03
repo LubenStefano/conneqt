@@ -24,9 +24,9 @@
   display: flex;
   align-items: center;
 }
-.sv-header h3{
-    font-size: 20px;
-    padding: 10px;
+.sv-header h3 {
+  font-size: 20px;
+  padding: 10px;
 }
 .sv-body {
   display: flex;
@@ -61,8 +61,39 @@
   color: #363540;
   text-align: right;
 }
-.upper-header{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.upper-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.post-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+.post-content img {
+  width: 20%;
+  border-radius: 15px;
+  margin-top: 15px;
+}
+.post-text-content{
+  width: 80%;
+  margin-left: 20px;
+}
+
+.loading,
+.no-posts {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+}
+
+.icon-close {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.icon-close:hover {
+  color: #ff4444;
 }

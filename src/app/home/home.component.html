@@ -1,5 +1,9 @@
 <div id="home">
-<app-create-post-aside></app-create-post-aside>
+@if(isAuthenticated){
+  <app-create-post-aside></app-create-post-aside>  
+}
 <app-post-flow></app-post-flow>
-<app-saved-posts-aside></app-saved-posts-aside>
+@if(isAuthenticated){
+  <app-saved-posts-aside></app-saved-posts-aside>
+}
 </div>

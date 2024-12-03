@@ -56,6 +56,7 @@ export class RegisterComponent {
       password: form.value.password,
       img: DEFAULT_USER_IMG,
       id: '', // Will be assigned by the backend or Firebase
+      savedPosts: [],
     };
 
     console.log(user);

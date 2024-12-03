@@ -1,29 +1,58 @@
 <main>
     <section id="main-flow">
-        @for (post of posts; track $index) {
-           <div class="post">
-            <div class="upper-header">
-                <app-user-badge [username]="post.username" [userPfp]="post.userPfp" ></app-user-badge>
-                <div class="post-time">
-                    <span>{{post.date}}</span>
-                </div>
-            </div>
-            <div class="post-box">
-                <div class="post-content">
-                    <!-- check if there is an image -->
-                    <p>{{post.content}}</p>
-                    @if(post.img) {
-                        <img src="{{post.img}}" alt="img">
-                    }
-                </div>
-                <div class="post-actions">
-                    <fa-icon [icon]="faShare" class="share-icon icon-interactive"></fa-icon>
-                    <fa-icon [icon]="faComment" class="comment-icon icon-interactive"></fa-icon>
-                    <fa-icon [icon]="faHeart" class="heart-icon icon-interactive"></fa-icon>
-                    <fa-icon [icon]="faBookmark" class="bookmark-icon icon-interactive"></fa-icon>
-                </div>
-            </div>
-        </div>   
+      @if (!isAuthenticated) {
+        <div class="auth-prompt">
+          <p>Please login to interact with posts</p>
+        </div>
+      }
+      
+      @for (post of posts; track post._id) {
+        <div class="post">
+      <div class="upper-header">
+        <app-user-badge
+          [username]="post.username"
+          [userPfp]="post.userPfp"
+        ></app-user-badge>
+        <div class="post-time">
+          <span>{{ post.date }}</span>
+        </div>
+      </div>
+      <div class="post-box">
+        <div class="post-content">
+          <p>{{ post.content }}</p>
+          @if (post.img) {
+          <img [src]="post.img" alt="Post Image" />
+          }
+        </div>
+        @if (isAuthenticated) {
+        <div class="post-actions">
+            <fa-icon
+              [icon]="isLiked(post) ? faHeartSolid : faHeart"
+              class="heart-icon icon-interactive"
+              [ngClass]="{
+                'liked': isLiked(post),
+                'changing': isLiked(post) !== prevLikedState
+              }"
+              (click)="likePost(post._id)"
+            ></fa-icon>
+            <fa-icon
+              [icon]="faComment"
+              class="comment-icon icon-interactive"
+            ></fa-icon>
+            <fa-icon
+              [icon]="faShare"
+              class="share-icon icon-interactive"
+            ></fa-icon>
+            <fa-icon
+              [icon]="isSaved(post._id) ? faBookmarkSolid : faBookmark"
+              class="bookmark-icon icon-interactive"
+              [ngClass]="{ 'saved': isSaved(post._id) }"
+              (click)="savePost(post._id)"
+            ></fa-icon>
+          </div>
         }
+        </div>
+        </div>
+    }
     </section>
-</main>
+  </main>

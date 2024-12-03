@@ -1,4 +1,9 @@
 /* main */
+main{
+    display: flex;
+    flex: 1;
+   height: 100%;
+}
 #main-flow{
     display: flex;
     flex-direction: column;
@@ -27,7 +32,7 @@
     border-radius: 15px;
     margin-top: 15px;
 }
-.post-box{
+post-box{
     margin: 20px 0;
     background-color:#e3e3e3;
     border-radius: 15px;
@@ -36,4 +41,66 @@
 .post-actions{
     display: flex;
     justify-content: space-between;
+}
+.auth-prompt {
+    text-align: center;
+    padding: 20px;
+    margin: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    color: #666;
+  }
+
+.heart-icon {
+    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+  }
+  
+
+  .liked {
+    color: red; 
+    animation: like-animation 0.4s ease-in-out;
+  }
+  
+  @keyframes like-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1); 
+    }
+  }
+  
+  .changing {
+    transition: none; 
+  }
+
+  .bookmark-icon {
+    transition: color 0.2s ease;
+    cursor: pointer;
+    color: #262626;
+  }
+  
+  .bookmark-icon.saved {
+    color: #f6d100;
+    animation: save-animation 0.4s ease-in-out;
+  }
+@keyframes save-animation {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    25% {
+        transform: scale(1.1) rotate(-10deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(10deg);
+    }
+    75% {
+        transform: scale(1.1) rotate(-10deg);
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
 }

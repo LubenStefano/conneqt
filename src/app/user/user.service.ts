@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, updateProfile, User, signOut, onAuthStateChanged, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { doc, docData, DocumentReference, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { arrayRemove, arrayUnion, doc, docData, DocumentReference, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, from, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
@@ -26,6 +26,7 @@ export class UserService {
             displayName: username,
             photoURL: img,
             createdAt: new Date().toISOString(),
+            savedPosts: [],
           };
           return setDoc(userDocRef, userDocData);
         });
@@ -101,6 +102,26 @@ export class UserService {
       catchError((error) => {
         console.error('Error fetching user by reference:', error);
         return of(null); // Return null on error
+      })
+    );
+  }
+
+  savePost(userId: string, postId: string): Observable<void> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return from(updateDoc(userDocRef, { savedPosts: arrayUnion(postId) })).pipe(
+      catchError((error) => {
+        console.error('Error saving post:', error);
+        throw new Error('Failed to save post');
+      })
+    );
+  }
+
+  unsavePost(userId: string, postId: string): Observable<void> {
+    const userDocRef = doc(this.firestore, `users/${userId}`);
+    return from(updateDoc(userDocRef, { savedPosts: arrayRemove(postId) })).pipe(
+      catchError((error) => {
+        console.error('Error unsaving post:', error);
+        throw new Error('Failed to unsave post');
       })
     );
   }

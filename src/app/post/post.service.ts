@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy, docData } from '@angular/fire/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
-import { catchError, map, switchMap, tap } from 'rxjs/operators';
-import { from, Observable, throwError } from 'rxjs';
+import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { combineLatest, from, Observable, of, throwError } from 'rxjs';
 import { Post } from '../types/post';
-import { limit } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, limit, updateDoc } from 'firebase/firestore';
+import { UserService } from '../user/user.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  constructor(private firestore: Firestore) {}
+  constructor(private firestore: Firestore, private userService: UserService) {}
 
   getPosts(): Observable<Post[]> {
     const postsCollection = collection(this.firestore, 'post');
@@ -59,6 +60,7 @@ export class PostService {
       likes: [],
       comments: [],
       createdAt: new Date(),
+      _id: '',  // Placeholder ID
     };
 
     if (img) {
@@ -101,7 +103,63 @@ export class PostService {
         });
     });
   }
+  getPostById(postId: string): Observable<any> {
+    const postRef = doc(this.firestore, `post/${postId}`);
+    return docData(postRef).pipe(
+      take(1), // Automatically complete after receiving the first value
+      catchError((error) => {
+        console.error('Error fetching post:', error);
+        throw error; // Rethrow error to be handled downstream
+      })
+    );
+  }
+  likePost(postId: string, userId: string): Observable<void> {
+    return this.getPostById(postId).pipe(
+      switchMap((postData) => {
+        const postRef = doc(this.firestore, `post/${postId}`);
+        const likes = postData?.likes || [];
 
+        if (likes.includes(userId)) {
+          // User already liked the post, remove their ID
+          return from(updateDoc(postRef, { likes: arrayRemove(userId) }));
+        } else {
+          // User has not liked the post, add their ID
+          return from(updateDoc(postRef, { likes: arrayUnion(userId) }));
+        }
+      }),
+      catchError((error) => {
+        console.error('Error updating likes:', error);
+        throw error; // Ensure errors are properly propagated
+      })
+    );
+  }
+
+  getSavedPosts(savedPostIds: string[]): Observable<Post[]> {
+    if (!savedPostIds || savedPostIds.length === 0) {
+      return of([]);
+    }
+  
+    const posts: Observable<Post>[] = savedPostIds.map(postId => {
+      const postRef = doc(this.firestore, `post/${postId}`);
+      return docData(postRef, { idField: '_id' }).pipe(
+        switchMap((post: any) => {
+          if (!post) return of(null);
+          
+          return this.userService.getUserByReference(post.creator).pipe(
+            map(creator => ({
+              ...post,
+              creatorName: creator?.displayName || 'Unknown User',
+              creatorPfp: creator?.photoURL || 'default-profile-pic-url'
+            }))
+          );
+        }),
+        filter((post): post is Post => post !== null)
+      );
+    });
+  
+    return combineLatest(posts);
+  }
+  
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');

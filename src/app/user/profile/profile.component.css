@@ -1,11 +1,12 @@
 main{
     display: flex;
+    flex: 1;
     justify-content: center;
-    height: 100vh;
+    height: 100%;
 }
 .profile-page{
     margin-top: 100px;
-    width: 60%;
+    width: 600px;
     padding-top: 50px;
     margin-bottom: 0;
 }

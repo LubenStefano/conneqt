@@ -1,11 +1,14 @@
 import { DocumentReference } from '@angular/fire/firestore';
 
 export interface Post {
-  content: string;
-  img?: string;
-  creator: DocumentReference; 
-  date: string;
-  likes: string[];
-  comments: string[];
-  createdAt: Date;
+  _id: string; 
+  content: string; 
+  creator: DocumentReference;
+  creatorName?: string; 
+  creatorPfp?: string; 
+  date: string; 
+  img?: string; 
+  likes: string[]; 
+  comments: string[]; 
+  createdAt: Date; 
 }
