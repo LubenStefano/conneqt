@@ -51,6 +51,13 @@ post-box{
     color: #666;
   }
 
+  #likes{
+    position: relative;
+    left: 30px;
+    bottom: 35px;
+    font-family: monospace;
+  }
+
 .heart-icon {
     transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
   }
@@ -72,6 +79,32 @@ post-box{
       transform: scale(1); 
     }
   }
+  .like-bubble {
+  position: absolute;
+  color: red;
+  font-size: 20px;
+  pointer-events: none;
+  animation: float-to-likes 0.8s ease-out forwards;
+}
+
+@keyframes float-to-likes {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(15px, -15px) scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(30px, -35px) scale(0.5);
+  }
+}
+
+.likes-update {
+  animation: likes-bump 0.3s ease;
+}
   
   .changing {
     transition: none; 

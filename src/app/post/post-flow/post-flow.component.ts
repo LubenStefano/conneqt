@@ -32,6 +32,8 @@ export class PostFlowComponent implements OnInit {
   faBookmark = faBookmark;
   faBookmarkSolid = faBookmarkSolid;
 
+  likeBubbles: {[key: string]: boolean} = {};
+
   posts: (Post & User)[] = [];
   user: User | null = null;
 
@@ -107,12 +109,15 @@ export class PostFlowComponent implements OnInit {
       console.log('Please login to like posts');
       return;
     }
-
+  
     const post = this.posts.find((p) => p._id === id);
     if (!post) return;
-
+  
     this.prevLikedState = this.isLiked(post);
-
+    if (!this.prevLikedState) {
+      this.likeBubbles[id] = true;
+    }
+  
     this.postService.likePost(id, this.user.uid).subscribe({
       next: () => {
         if (this.prevLikedState) {
@@ -120,6 +125,9 @@ export class PostFlowComponent implements OnInit {
         } else {
           post.likes = post.likes || [];
           post.likes.push(this.user!.uid);
+          setTimeout(() => {
+            this.likeBubbles[id] = false;
+          }, 800);
         }
       },
       error: (error) => console.error('Error liking post:', error)

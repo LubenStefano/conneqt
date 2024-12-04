@@ -68,6 +68,9 @@
                 }"
                 (click)="likePost(post._id)"
               ></fa-icon>
+              @if(likeBubbles[post._id]) {
+                <span class="like-bubble">♥</span>
+              }
               <fa-icon
                 [icon]="faComment"
                 class="comment-icon icon-interactive"
@@ -87,6 +90,7 @@
                 (click)="savePost(post._id)"
               ></fa-icon>
             </div>
+            <p id="likes">{{post.likes.length}}</p>
             }
           </div>
         </div>
@@ -135,6 +139,9 @@
                   }"
                   (click)="likePost(post._id)"
                 ></fa-icon>
+                @if(likeBubbles[post._id]) {
+                  <span class="like-bubble">♥</span>
+                }
                 <fa-icon
                   [icon]="faComment"
                   class="comment-icon icon-interactive"
@@ -156,6 +163,7 @@
                   (click)="savePost(post._id)"
                 ></fa-icon>
               </div>
+              <p id="likes">{{post.likes.length}}</p>
               }
             </div>
           </div>
