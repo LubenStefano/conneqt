@@ -104,3 +104,41 @@ post-box{
         transform: scale(1) rotate(0deg);
     }
 }
+
+/* In post-flow.component.css */
+.copy-popup {
+  position: absolute;
+  background: #333;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  bottom: 100%;
+  left: 70%;
+  transform: translateX(-50%);
+  animation: fadeInOut 1s ease-in-out;
+  white-space: nowrap;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  85% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+.post-actions {
+  position: relative;
+}

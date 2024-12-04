@@ -13,7 +13,8 @@ import {
 } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartSolid, faBookmark as faBookmarkSolid } from '@fortawesome/free-solid-svg-icons'; 
 import { User } from '../../types/user';
-import { combineLatest, map, of, switchMap, tap } from 'rxjs';
+import { combineLatest, map, switchMap, tap } from 'rxjs';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-post-flow',
@@ -37,9 +38,13 @@ export class PostFlowComponent implements OnInit {
   prevLikedState: boolean = false;
   prevSavedState: boolean = false;
 
+  showCopyPopup = false;
+  copiedPostId: string | null = null;
+
   constructor(
     private postService: PostService,
-    private userService: UserService
+    private userService: UserService,
+    private clipboard: Clipboard
   ) {}
 
   // ... existing properties ...
@@ -157,5 +162,20 @@ export class PostFlowComponent implements OnInit {
   isSaved(postId: string): boolean {
     if (!this.isAuthenticated || !this.user) return false;
     return this.user.savedPosts?.includes(postId) ?? false;
+  }
+
+  sharePost(postId: string) {
+    const url = `${window.location.origin}/post/${postId}`;
+    this.clipboard.copy(url);
+    
+    // Show popup for specific post
+    this.copiedPostId = postId;
+    this.showCopyPopup = true;
+
+    // Hide popup after 2 seconds
+    setTimeout(() => {
+      this.showCopyPopup = false;
+      this.copiedPostId = null;
+    }, 1000);
   }
 }

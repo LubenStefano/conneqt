@@ -146,6 +146,8 @@
                 ></fa-icon>
                 @if (showCopyPopup && copiedPostId === post._id) {
                 <div class="copy-popup">Copied to clipboard!</div>
+                } @if (showCopyPopup && copiedPostId === post._id) {
+                <div class="copy-popup">Copied to clipboard!</div>
                 }
                 <fa-icon
                   [icon]="isSaved(post._id) ? faBookmarkSolid : faBookmark"
