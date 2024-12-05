@@ -16,11 +16,12 @@ import { FlowHighlightDirective } from './flow-option-highlight.directive';
 import {Subscription, switchMap, tap, map, of } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, FlowHighlightDirective, NgClass],
+  imports: [UserBadgeComponent, FontAwesomeModule, FlowHighlightDirective, NgClass, RouterLink],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })

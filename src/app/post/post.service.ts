@@ -25,6 +25,13 @@ export class PostService {
     );
   }
 
+  getPost(postId: string): Observable<Post> {
+    const postRef = doc(this.firestore, `post/${postId}`);
+    return docData(postRef, { idField: '_id' }).pipe(
+      filter((post): post is Post => post !== null)
+    );
+  }
+
   uploadImageToFirebase(base64Image: string): Observable<string> {
     if (!base64Image) {
       return throwError(() => new Error('No image provided'));
@@ -103,16 +110,26 @@ export class PostService {
         });
     });
   }
-  getPostById(postId: string): Observable<any> {
+  getPostById(postId: string): Observable<Post> {
     const postRef = doc(this.firestore, `post/${postId}`);
-    return docData(postRef).pipe(
+    return docData(postRef, { idField: '_id' }).pipe(
       take(1), // Automatically complete after receiving the first value
+      map((post) => {
+        if (!post) {
+          throw new Error('Post not found');
+        }
+        return {
+          ...post,
+          _id: postId, // Ensure the _id is set correctly
+        } as Post;
+      }),
       catchError((error) => {
         console.error('Error fetching post:', error);
-        throw error; // Rethrow error to be handled downstream
+        return throwError(() => new Error('Failed to fetch post'));
       })
     );
   }
+
   likePost(postId: string, userId: string): Observable<void> {
     return this.getPostById(postId).pipe(
       switchMap((postData) => {
@@ -160,6 +177,32 @@ export class PostService {
     return combineLatest(posts);
   }
   
+  addComment(postId: string, content: string, userId: string, userPfp: string): Observable<Comment> {
+    const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
+    const date = this.formatDate(new Date());
+    const creatorRef = doc(this.firestore, `users/${userId}`);
+
+    const commentData = {
+      content,
+      creator: creatorRef,
+      userPfp,
+      createdAt: new Date(),
+      date
+    };
+
+    return from(addDoc(postCommentsCollection, commentData)).pipe(
+      switchMap(docRef => 
+        this.userService.getUserByReference(creatorRef).pipe(
+          map(creator => ({
+            _id: docRef.id,
+            ...commentData,
+            creatorName: creator?.displayName || 'Unknown User',
+            creatorPfp: creator?.photoURL || 'default-profile-pic-url'
+          }) as unknown as Comment)
+        )
+      )
+    );
+  }
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');

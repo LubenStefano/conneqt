@@ -15,11 +15,12 @@ import { faHeart as faHeartSolid, faBookmark as faBookmarkSolid } from '@fortawe
 import { User } from '../../types/user';
 import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-post-flow',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, NgClass],
+  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, RouterLink],
   templateUrl: './post-flow.component.html',
   styleUrls: ['./post-flow.component.css'],
 })
@@ -91,7 +92,7 @@ export class PostFlowComponent implements OnInit {
         }
       })
     );
-
+    
     // Combine streams
     combineLatest([posts$, user$]).subscribe({
       next: ([posts, _]) => {
@@ -101,7 +102,11 @@ export class PostFlowComponent implements OnInit {
         console.error('Error loading data:', error);
         this.posts = [];
       }
-    });
+    });  
+    setTimeout(() => {
+      console.log(this.posts);
+    }, 2000);
+      
   }
 
   likePost(id: string) {
