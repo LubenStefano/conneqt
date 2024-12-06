@@ -15,7 +15,7 @@ import { PostService } from '../../post/post.service';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
 import { FlowHighlightDirective } from './flow-option-highlight.directive';
-import {Subscription, switchMap, tap, map, of } from 'rxjs';
+import {Subscription, switchMap, tap, of } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { RouterLink } from '@angular/router';

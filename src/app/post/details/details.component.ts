@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { UserBadgeComponent } from '../../user/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Post } from '../../types/post';
@@ -11,11 +11,14 @@ import {
   faHeart,
   faBookmark,
   faArrowAltCircleRight,
+  faPenToSquare, 
+  faTrashCan
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faHeart as faHeartSolid,
   faBookmark as faBookmarkSolid,
   faComment as faCommentSolid,
+  faEllipsisH 
 } from '@fortawesome/free-solid-svg-icons';
 import { User } from '../../types/user';
 import { map, switchMap, tap } from 'rxjs';
@@ -41,6 +44,9 @@ export class DetailsComponent implements OnInit {
   faBookmark = faBookmark;
   faBookmarkSolid = faBookmarkSolid;
   faArrow = faArrowAltCircleRight;
+  faEllipsisH = faEllipsisH;
+  faPenToSquare = faPenToSquare;
+  faTrash = faTrashCan;
 
   likeBubbles: { [key: string]: boolean } = {};
 
@@ -53,6 +59,10 @@ export class DetailsComponent implements OnInit {
 
   showCopyPopup = false;
   copiedPostId: string | null = null;
+
+  activePopupId: string | null = null;
+  showOptionsMenu = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -255,8 +265,35 @@ export class DetailsComponent implements OnInit {
         },
         error: (error) => console.error('Error adding comment:', error),
       });
-    setTimeout(() => {
-      console.log(this.comments);
-    }, 2000);
+
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    // Check if click is outside options menu
+    const target = event.target as HTMLElement;
+    if (!target.closest('.options-menu') && !target.closest('#faEllipsisH')) {
+      this.closeOptionsMenu();
+    }
+  }
+
+
+  toggleOptionsMenu(commentId: string, event: Event) {
+    event.stopPropagation();
+    this.activePopupId = this.activePopupId === commentId ? null : commentId;
+  }
+
+  closeOptionsMenu() {
+    this.activePopupId = null;
+  }
+
+  editComment(commentId: string) {
+    console.log('Edit Comment:', commentId);
+    this.closeOptionsMenu();
+  }
+
+  deleteComment(commentId: string) {
+    console.log('Delete Comment:', commentId);
+    this.closeOptionsMenu();
   }
 }

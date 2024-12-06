@@ -95,10 +95,32 @@
   <div class="comments">
     @for (comment of comments; track comment._id) {
     <div class="comment">
+      <div class="comment-header">
       <app-user-badge
         [username]="comment.displayName || ''"
         [userPfp]="comment.userPfp || ''"
       ></app-user-badge>
+      @if(isAuthenticated && comment.displayName === user?.username) {
+        <fa-icon 
+          [icon]="faEllipsisH" 
+          id="faEllipsisH" 
+          class="icon-interactive"
+          (click)="toggleOptionsMenu(comment._id, $event)">
+        </fa-icon>
+        @if(activePopupId === comment._id) {
+          <div class="options-menu" [class.active]="activePopupId === comment._id">
+            <div class="option-item" (click)="editComment(comment._id)">
+              <fa-icon [icon]="faPenToSquare"></fa-icon>
+              Edit
+            </div>
+            <div class="option-item delete" (click)="deleteComment(comment._id)">
+              <fa-icon [icon]="faTrash"></fa-icon>
+              Delete
+            </div>
+          </div>
+        }
+      }
+      </div>
       <div class="comment-content">
         <p>{{ comment.content }}</p>
       </div>
