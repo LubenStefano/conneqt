@@ -45,6 +45,26 @@
               [userPfp]="post.userPfp"
             ></app-user-badge>
             <div class="post-time">
+              @if(isAuthenticated && post.username === user?.username) {
+                <fa-icon 
+                  [icon]="faEllipsisH" 
+                  id="faEllipsisH" 
+                  class="icon-interactive"
+                  (click)="toggleOptionsMenu(post._id, $event)">
+                </fa-icon>
+                @if(activePopupId === post._id) {
+                  <div class="options-menu" [class.active]="activePopupId === post._id">
+                    <div class="option-item" (click)="editPost(post._id)">
+                      <fa-icon [icon]="faPenToSquare"></fa-icon>
+                      Edit
+                    </div>
+                    <div class="option-item delete" (click)="deletePost(post._id)">
+                      <fa-icon [icon]="faTrash"></fa-icon>
+                      Delete
+                    </div>
+                  </div>
+                }
+              }
               <span>{{ post.date }}</span>
             </div>
           </div>

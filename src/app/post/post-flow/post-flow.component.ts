@@ -103,7 +103,6 @@ export class PostFlowComponent implements OnInit {
         this.posts = [];
       }
     });  
-
     setTimeout(() => {
       console.log(this.posts);
     }, 2000);

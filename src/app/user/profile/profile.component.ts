@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { UserBadgeComponent } from '../user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
@@ -6,8 +6,10 @@ import {
   faComment,
   faHeart,
   faBookmark,
+  faPenToSquare, 
+  faTrashCan
 } from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid, faBookmark as faBookmarkSolid } from '@fortawesome/free-solid-svg-icons'; 
+import { faHeart as faHeartSolid, faBookmark as faBookmarkSolid, faEllipsisH } from '@fortawesome/free-solid-svg-icons'; 
 import { UserService } from '../user.service';
 import { PostService } from '../../post/post.service';
 import { Post } from '../../types/post';
@@ -33,6 +35,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   faHeartSolid = faHeartSolid; 
   faBookmark = faBookmark;
   faBookmarkSolid = faBookmarkSolid;
+  faEllipsisH = faEllipsisH;
+  faPenToSquare = faPenToSquare;
+  faTrash = faTrashCan;
+
+  activePopupId: string | null = null;
+  showOptionsMenu = false;
 
   likeBubbles: {[key: string]: boolean} = {};
 
@@ -199,6 +207,35 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.showCopyPopup = false;
       this.copiedPostId = null;
     }, 1000);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    // Check if click is outside options menu
+    const target = event.target as HTMLElement;
+    if (!target.closest('.options-menu') && !target.closest('#faEllipsisH')) {
+      this.closeOptionsMenu();
+    }
+  }
+
+
+  toggleOptionsMenu(postId: string, event: Event) {
+    event.stopPropagation();
+    this.activePopupId = this.activePopupId === postId ? null : postId;
+  }
+
+  closeOptionsMenu() {
+    this.activePopupId = null;
+  }
+
+  editPost(postId: string) {
+    console.log('Edit post:', postId);
+    this.closeOptionsMenu();
+  }
+
+  deletePost(postId: string) {
+    console.log('Delete post:', postId);
+    this.closeOptionsMenu();
   }
 
   ngOnDestroy() {
