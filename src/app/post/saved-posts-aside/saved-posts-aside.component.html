@@ -13,7 +13,7 @@
                     <div class="no-posts">No saved posts yet</div>
                 } @else {
                     @for (savedPost of savedPosts; track $index) {
-                    <div class="post sv-post" routerLink="/post/{{ savedPost._id }}">
+                    <div class="post sv-post">
                         <div class="upper-header">
                             <div id="sv-user">
                                 <app-user-badge 
@@ -27,7 +27,7 @@
                             (click)="unsavePost(savedPost._id)">
                         </fa-icon>
                         </div>
-                        <div class="post-content">
+                        <div class="post-content" routerLink="/post/{{ savedPost._id }}">
                             @if(savedPost.img) {
                                 <img [src]="savedPost.img" alt="Post Image" />
                             }

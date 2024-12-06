@@ -171,7 +171,12 @@ post-box{
     transform: translateX(-50%) translateY(-10px);
   }
 }
-
+#comments{
+  position: relative;
+  left: 180px;
+  bottom: 50px;
+  font-family: monospace;
+}
 .post-actions {
   position: relative;
 }

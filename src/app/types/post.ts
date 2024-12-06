@@ -9,6 +9,6 @@ export interface Post {
   date: string; 
   img?: string; 
   likes: string[]; 
-  comments: string[]; 
   createdAt: Date; 
+  commentAmount: number;
 }

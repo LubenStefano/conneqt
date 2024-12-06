@@ -10,35 +10,43 @@ import {
   faComment,
   faHeart,
   faBookmark,
+  faArrowAltCircleRight,
 } from '@fortawesome/free-regular-svg-icons';
 import {
   faHeart as faHeartSolid,
   faBookmark as faBookmarkSolid,
+  faComment as faCommentSolid,
 } from '@fortawesome/free-solid-svg-icons';
 import { User } from '../../types/user';
-import { combineLatest, map, switchMap, tap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Comment } from '../../types/comment';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, NgClass],
+  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, FormsModule],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
 export class DetailsComponent implements OnInit {
   faShare = faPaperPlane;
   faComment = faComment;
+  faCommentSolid = faCommentSolid;
+  showCommentTooltip = false;
   faHeart = faHeart;
   faHeartSolid = faHeartSolid;
   faBookmark = faBookmark;
   faBookmarkSolid = faBookmarkSolid;
+  faArrow = faArrowAltCircleRight;
 
   likeBubbles: { [key: string]: boolean } = {};
 
   post: (Post & User) | null = null;
   user: User | null = null;
+  comments: Comment[] = [];
 
   prevLikedState: boolean = false;
   prevSavedState: boolean = false;
@@ -54,71 +62,87 @@ export class DetailsComponent implements OnInit {
   ) {}
 
   isAuthenticated = false;
-ngOnInit(): void {
-  const postId = this.route.snapshot.paramMap.get('id');
-  
-  if (!postId) {
-    console.error('Post ID is null or undefined');
-    return;
-  }
+  ngOnInit(): void {
+    const postId = this.route.snapshot.paramMap.get('id');
 
-  const post$ = this.postService.getPostById(postId).pipe(
-    switchMap((post) =>
-      this.userService.getUserByReference(post.creator).pipe(
-        map((user) => ({
-          ...post,
-          _id: post._id,
-          ...user,
-        }))
+    if (!postId) {
+      console.error('Post ID is null or undefined');
+      return;
+    }
+
+    const post$ = this.postService.getPostById(postId).pipe(
+      switchMap((post) =>
+        this.userService.getUserByReference(post.creator).pipe(
+          map((user) => ({
+            ...post,
+            _id: post._id,
+            ...user,
+          }))
+        )
       )
-    )
-  );
+    );
 
-  this.userService.getUser().pipe(
-    tap((user) => {
-      this.isAuthenticated = !!user;
-      this.user = user
-        ? {
-            uid: user.uid,
-            username: user.displayName || 'Unknown User',
-            userPfp: user.photoURL || '',
-            savedPosts: Array.isArray((user as any).savedPosts)
-              ? (user as any).savedPosts
-              : [],
-            displayName: user.displayName || undefined,
-            photoURL: user.photoURL || undefined,
-            email: user.email || undefined,
-          }
-        : null;
-    }),
-    switchMap(() => post$)
-  ).subscribe({
-    next: (post) => {
-      this.post = post;
-      console.log('Post loaded:', this.post);
-    },
-    error: (error) => {
-      console.error('Error loading data:', error);
-      this.post = null;
-    },
-  });
-}
+    this.userService
+      .getUser()
+      .pipe(
+        tap((user) => {
+          this.isAuthenticated = !!user;
+          this.user = user
+            ? {
+                uid: user.uid,
+                username: user.displayName || 'Unknown User',
+                userPfp: user.photoURL || '',
+                savedPosts: Array.isArray((user as any).savedPosts)
+                  ? (user as any).savedPosts
+                  : [],
+                displayName: user.displayName || undefined,
+                photoURL: user.photoURL || undefined,
+                email: user.email || undefined,
+              }
+            : null;
+        }),
+        switchMap(() => post$)
+      )
+      .subscribe({
+        next: (post) => {
+          this.post = post;
+          console.log('Post loaded:', this.post);
+        },
+        error: (error) => {
+          console.error('Error loading data:', error);
+          this.post = null;
+        },
+      });
+
+    const comments$ = this.postService.getComments(postId);
+
+    comments$.subscribe({
+      next: (comments: Comment[]) => {
+        this.comments = comments; // Correctly typed as Comment[]
+        console.log('Comments loaded:', this.comments);
+      },
+      error: (error: any) => {
+        console.error('Error loading comments:', error);
+        this.comments = []; // Handle error case and set empty array
+      },
+    });
+  }
   likePost(id: string) {
     console.log('Like post:', id);
-    
+
     if (!this.isAuthenticated || !this.user) {
       console.log('Please login to like posts');
       return;
     }
-  
+
     const post = this.post; // Използваме текущия пост
     if (!post || !post.likes) return;
-  
+
     this.prevLikedState = this.isLiked(post);
     if (!this.prevLikedState) {
       this.likeBubbles[id] = true; // Анимация за лайк
     }
-  
+
     this.postService.likePost(id, this.user.uid).subscribe({
       next: () => {
         if (this.prevLikedState) {
@@ -142,14 +166,14 @@ ngOnInit(): void {
       console.log('Please login to save posts');
       return;
     }
-  
+
     const isSaved = this.isSaved(postId); // Проверка дали е запазен
     this.prevSavedState = isSaved;
-  
+
     const saveAction$ = isSaved
       ? this.userService.unsavePost(this.user.uid, postId) // Премахване на запазен пост
       : this.userService.savePost(this.user.uid, postId); // Запазване на поста
-  
+
     saveAction$.subscribe({
       next: () => {
         if (this.user) {
@@ -169,7 +193,8 @@ ngOnInit(): void {
   }
 
   isLiked(post: Post | null): boolean {
-    if (!this.isAuthenticated || !this.user || !post || !post.likes) return false;
+    if (!this.isAuthenticated || !this.user || !post || !post.likes)
+      return false;
     return post.likes.includes(this.user.uid);
   }
   isSaved(postId: string): boolean {
@@ -177,18 +202,61 @@ ngOnInit(): void {
     return this.user.savedPosts?.includes(postId) ?? false; // Проверка дали постът е запазен
   }
 
-sharePost(postId: string) {
-  const url = `${window.location.origin}/post/${postId}`; // Генериране на линка
-  this.clipboard.copy(url); // Копиране в клипборда
+  sharePost(postId: string) {
+    const url = `${window.location.origin}/post/${postId}`; // Генериране на линка
+    this.clipboard.copy(url); // Копиране в клипборда
 
-  // Показваме попъп за потвърждение
-  this.copiedPostId = postId;
-  this.showCopyPopup = true;
+    // Показваме попъп за потвърждение
+    this.copiedPostId = postId;
+    this.showCopyPopup = true;
 
-  // Скриване на попъпа след 2 секунди
-  setTimeout(() => {
-    this.showCopyPopup = false;
-    this.copiedPostId = null;
-  }, 1000);
-}
+    // Скриване на попъпа след 2 секунди
+    setTimeout(() => {
+      this.showCopyPopup = false;
+      this.copiedPostId = null;
+    }, 1000);
+  }
+  comment(form: NgForm) {
+    const postId = this.post?._id;
+    const content = form.value.commentContent;
+    const userId = this.user?.uid;
+    const userPfp = this.user?.userPfp;
+    const displayName = this.user?.displayName;
+
+    console.log('Comment:', content);
+
+    if (!postId) {
+      console.error('Post ID is null or undefined');
+      return;
+    }
+    if (!this.isAuthenticated || !this.user) {
+      console.log('Please login to comment');
+      return;
+    }
+    if (!userId || !userPfp) {
+      console.error('User ID or User Profile Picture is null or undefined');
+      return;
+    }
+    if (!content) {
+      console.error('Comment content is null or undefined');
+      return;
+    }
+    if (!displayName) {
+      console.error('Display Name is null or undefined');
+      return;
+    }
+
+    this.postService
+      .addComment(postId, content, userId, displayName, userPfp)
+      .subscribe({
+        next: (comment) => {
+          console.log('Comment added:', comment);
+          form.resetForm();
+        },
+        error: (error) => console.error('Error adding comment:', error),
+      });
+    setTimeout(() => {
+      console.log(this.comments);
+    }, 2000);
+  }
 }

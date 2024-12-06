@@ -5,6 +5,7 @@ import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { combineLatest, from, Observable, of, throwError } from 'rxjs';
 import { Post } from '../types/post';
 import { arrayRemove, arrayUnion, limit, updateDoc } from 'firebase/firestore';
+import { Comment } from '../types/comment';
 import { UserService } from '../user/user.service';
 
 @Injectable({
@@ -59,21 +60,21 @@ export class PostService {
     const postsCollection = collection(this.firestore, 'post');
     const creatorDocRef = doc(this.firestore, `users/${creatorId}`);
     const date = this.formatDate(new Date());
-
+  
     const newPost: Post = {
       content,
       creator: creatorDocRef,
       date,
       likes: [],
-      comments: [],
       createdAt: new Date(),
-      _id: '',  // Placeholder ID
+      _id: '',
+      commentAmount: 0, // Initialize to 0
     };
-
+  
     if (img) {
       newPost.img = img;
     }
-
+  
     return from(addDoc(postsCollection, newPost)).pipe(
       tap((docRef) => {
         console.log('Post created successfully with ID:', docRef.id);
@@ -177,32 +178,58 @@ export class PostService {
     return combineLatest(posts);
   }
   
-  addComment(postId: string, content: string, userId: string, userPfp: string): Observable<Comment> {
+  addComment(postId: string, content: string, userId: string,displayName:string, userPfp: string): Observable<Comment> {
     const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
     const date = this.formatDate(new Date());
     const creatorRef = doc(this.firestore, `users/${userId}`);
 
     const commentData = {
-      content,
+      _id: '' ,// Placeholder ID
+      content: content,
       creator: creatorRef,
-      userPfp,
+      displayName: displayName,
+      userPfp: userPfp,
+      uid: userId,
       createdAt: new Date(),
-      date
+      date: date,
     };
 
     return from(addDoc(postCommentsCollection, commentData)).pipe(
-      switchMap(docRef => 
-        this.userService.getUserByReference(creatorRef).pipe(
-          map(creator => ({
-            _id: docRef.id,
+      switchMap((docRef) => {
+        // Get current comments count and update post
+        return this.getComments(postId).pipe(
+          tap(comments => {
+            const commentAmount = comments.length;
+            this.updateCommentAmount(postId, commentAmount).subscribe();
+          }),
+          map(() => ({
             ...commentData,
-            creatorName: creator?.displayName || 'Unknown User',
-            creatorPfp: creator?.photoURL || 'default-profile-pic-url'
-          }) as unknown as Comment)
-        )
-      )
+            _id: docRef.id,
+          }))
+        );
+      })
     );
-  }
+}
+getComments(postId: string): Observable<Comment[]> {
+  const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
+  const postCommentsQuery = query(postCommentsCollection, orderBy('createdAt', 'desc'));
+
+  return collectionData(postCommentsQuery, { idField: '_id' }).pipe(
+    map((comments: any[]) => {
+      const mappedComments = comments.map(comment => ({
+        ...comment,
+        createdAt: comment.createdAt.toDate(),
+        _id: comment._id || '',
+      }));
+      
+      // Update comment amount
+      this.updateCommentAmount(postId, mappedComments.length).subscribe();
+      
+      return mappedComments;
+    })
+  );
+}
+
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -211,5 +238,10 @@ export class PostService {
     const minutes = date.getMinutes().toString().padStart(2, '0');
 
     return `${day}.${month}.${year} at ${hours}:${minutes}`;
+  }
+
+  updateCommentAmount(postId: string, amount: number): Observable<void> {
+    const postRef = doc(this.firestore, `post/${postId}`);
+    return from(updateDoc(postRef, { commentAmount: amount }));
   }
 }
