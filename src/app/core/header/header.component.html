@@ -4,7 +4,7 @@
         <ul id="nav-links">
             <li class="nav-link"><a href="home">Home</a></li>
             @if(user){
-                <li class="nav-link"><a href="profile">My Profile</a></li>
+                <li class="nav-link"><a href="profile/{{user.uid}}">My Profile</a></li>
                 <li class="nav-link"><a href="#" (click)="onLogout()" >Logout</a></li>
             }@else {
                 <li class="nav-link"><a href="login">Login</a></li>

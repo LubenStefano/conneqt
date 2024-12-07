@@ -18,7 +18,7 @@ import { FlowHighlightDirective } from './flow-option-highlight.directive';
 import {Subscription, switchMap, tap, of } from 'rxjs';
 import { NgClass } from '@angular/common';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -55,6 +55,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   isLoading = true;
   isEmpty = false;
 
+  userProfile = false;
+
   private subscription = new Subscription();
 
   showCopyPopup = false;
@@ -63,11 +65,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
   constructor(
     private userService: UserService,
     private postService: PostService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    const user$ = this.userService.getUser().pipe(
+    const userId = this.route.snapshot.paramMap.get('id');
+    if (!userId) {
+      console.error('User ID is null');
+      return;
+    }
+    const user$ = this.userService.getUserById(userId).pipe(
       tap(user => {
         this.isAuthenticated = !!user;
         if (user) {
@@ -82,6 +90,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           };
           this.username = this.user.username;
           this.userPfp = this.user.userPfp;
+          this.userService.getUser().subscribe(currentUser => {
+            if (this.user?.uid === currentUser?.uid) {
+              this.userProfile = true;
+            }
+          });
         } else {
           this.user = null;
           this.isEmpty = true;
@@ -234,8 +247,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   deletePost(postId: string) {
-    console.log('Delete post:', postId);
-    this.closeOptionsMenu();
+    this.postService.deletePost(postId).subscribe({
+      next: () => {
+        this.posts = this.posts.filter((post) => post._id !== postId);
+        this.closeOptionsMenu();
+      },
+      error: (error) => console.error('Error deleting post:', error)
+    });
   }
 
   ngOnDestroy() {

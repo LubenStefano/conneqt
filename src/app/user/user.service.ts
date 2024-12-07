@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, updateProfile, User, signOut, onAuthStateChanged, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { arrayRemove, arrayUnion, doc, docData, DocumentReference, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
-import { Observable, BehaviorSubject, from, of } from 'rxjs';
+import { Observable, BehaviorSubject, from, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 
 @Injectable({
@@ -85,7 +85,20 @@ export class UserService {
     });
   });
 }
-
+getUserById(uid: string): Observable<User | null> {
+  return new Observable((subscriber) => {
+    // Get user directly from Firestore using provided ID
+    this.getUserFromFirestore(uid).pipe(
+      catchError((error) => {
+        console.error('Error fetching user by ID:', error);
+        return of(null);
+      })
+    ).subscribe(firestoreUser => {
+      subscriber.next(firestoreUser);
+      subscriber.complete();
+    });
+  });
+}
   
   private getUserFromFirestore(uid: string): Observable<User | null> {
     const userDocRef = doc(this.firestore, `users/${uid}`);
@@ -125,4 +138,14 @@ export class UserService {
       })
     );
   }
+  updateProfile(userId: string, updates: { displayName?: string; photoURL?: string }): Observable<void> {
+    const userRef = doc(this.firestore, `users/${userId}`);
+    return from(updateDoc(userRef, updates)).pipe(
+      catchError(error => {
+        console.error('Error updating profile:', error);
+        return throwError(() => new Error('Failed to update profile'));
+      })
+    );
+  }
 }
+

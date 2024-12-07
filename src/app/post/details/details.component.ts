@@ -23,14 +23,14 @@ import {
 import { User } from '../../types/user';
 import { map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Comment } from '../../types/comment';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, FormsModule],
+  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, FormsModule, RouterLink],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
@@ -54,6 +54,7 @@ export class DetailsComponent implements OnInit {
   user: User | null = null;
   comments: Comment[] = [];
 
+
   prevLikedState: boolean = false;
   prevSavedState: boolean = false;
 
@@ -68,7 +69,8 @@ export class DetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private postService: PostService,
     private userService: UserService,
-    private clipboard: Clipboard
+    private clipboard: Clipboard,
+    private router: Router
   ) {}
 
   isAuthenticated = false;
@@ -287,13 +289,13 @@ export class DetailsComponent implements OnInit {
     this.activePopupId = null;
   }
 
-  editComment(commentId: string) {
-    console.log('Edit Comment:', commentId);
-    this.closeOptionsMenu();
-  }
-
-  deleteComment(commentId: string) {
-    console.log('Delete Comment:', commentId);
-    this.closeOptionsMenu();
+  deleteComment(postId: string, commentId: string) {
+    this.postService.deleteComment(postId, commentId).subscribe({
+      next: () => {
+        this.comments = this.comments.filter((comment) => comment._id !== commentId);
+        this.closeOptionsMenu();
+      },
+      error: (error) => console.error('Error deleting comment:', error),
+    });
   }
 }

@@ -1,0 +1,41 @@
+<main>
+<div class="edit-comment-container">
+    <h2>Edit Comment</h2>
+    @if(comment && user) {
+      <form #editForm="ngForm" (ngSubmit)="updateComment(editForm)">
+        <div class="form-header">
+          <app-user-badge
+            [username]="user.username"
+            [userPfp]="user.userPfp">
+          </app-user-badge>
+        </div>
+        
+        <div class="form-content">
+          <textarea
+            name="content"
+            [(ngModel)]="comment.content"
+            required
+            minlength="1"
+            #content="ngModel">
+          </textarea>
+          @if (content.invalid && (content.dirty || content.touched)) {
+            <div class="error">
+              Content is required
+            </div>
+          }
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" [disabled]="editForm.invalid || isSubmitting">
+            Update Comment
+          </button>
+          <button type="button" (click)="cancel()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    } @else {
+      <div class="loading">Loading comment...</div>
+    }
+  </div>
+</main>

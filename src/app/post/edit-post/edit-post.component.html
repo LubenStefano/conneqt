@@ -1,0 +1,81 @@
+<main>
+  <div class="edit-container">
+    <h2 class="edit-page-caption">Edit Page</h2>
+    @if (post && user) {
+    <form #editForm="ngForm" (ngSubmit)="updatePost(editForm)">
+      <div class="form-header">
+        <app-user-badge [username]="user.username" [userPfp]="user.userPfp">
+        </app-user-badge>
+      </div>
+
+      <div class="form-content">
+        <textarea
+          name="content"
+          [(ngModel)]="post.content"
+          required
+          minlength="1"
+          #content="ngModel"
+        >
+        </textarea>
+        @if (content.invalid && (content.dirty || content.touched)) {
+        <div class="error">Content is required</div>
+        }
+      </div>
+
+      @if (post.img) {
+      <!-- Update in edit-post.component.html -->
+      <div class="img-container">
+        @if(photo || selectedImage) {
+        <div class="current-image">
+          <img [src]="selectedImage || photo" alt="Post image" />
+          <div class="image-actions">
+          <button type="button" class="remove-image" (click)="removeImage()">
+            <fa-icon
+            [icon]="faTrash"
+            class="trash-icon icon-interactive"
+          ></fa-icon>
+            Remove Image
+          </button>
+          <button type="button" (click)="fileInput.click()">
+              <fa-icon
+              [icon]="faImage"
+              class="image-icon icon-interactive"
+              ></fa-icon>
+              {{ photo || selectedImage ? "Change Image" : "Add Image" }}
+            </button>
+        </div>
+        </div>
+        }
+        <input
+          type="file"
+          #fileInput
+          (change)="onFileSelected($event)"
+          accept="image/*"
+          style="display: none"
+        />
+        @if(showCropper) {
+        <div class="cropper-modal">
+          <app-image-cropper
+            [imageChangedEvent]="selectedFileEvent"
+            (imageCropped)="onImageCropped($event)"
+            (cropSaved)="onCropSaved()"
+            (cropCancelled)="onCropCancelled()"
+          >
+          </app-image-cropper>
+        </div>
+        }
+      </div>
+      }
+
+      <div class="form-actions">
+        <button type="submit" [disabled]="editForm.invalid || isSubmitting">
+          Update Post
+        </button>
+        <button type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+    } @else {
+    <div class="loading">Loading post...</div>
+    }
+  </div>
+</main>

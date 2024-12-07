@@ -11,7 +11,7 @@
 
     <div class="cp-body">
       <div id="cp-user">
-        <app-user-badge [username]="username" [userPfp]="userPfp"></app-user-badge>
+        <app-user-badge routerLink="/profile/{{userId}}" [username]="username" [userPfp]="userPfp" ></app-user-badge>
       </div>
 
       <div class="cp-form">

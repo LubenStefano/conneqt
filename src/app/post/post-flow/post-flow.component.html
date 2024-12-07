@@ -8,6 +8,7 @@
     <div class="post">
       <div class="upper-header">
         <app-user-badge
+        routerLink="/profile/{{post.uid}}"
           [username]="post.username"
           [userPfp]="post.userPfp"
         ></app-user-badge>

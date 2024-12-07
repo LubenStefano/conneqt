@@ -6,7 +6,9 @@
         [userPfp]="userPfp"
         id="user-info-profile"
       ></app-user-badge>
-      <button class="edit-profile">edit</button>
+      @if(userProfile){
+      <button class="edit-profile" routerLink="/profile/{{user?.uid}}/edit">edit</button>
+      }
     </div>
 
     <div class="flow-options">
@@ -17,6 +19,7 @@
       >
         posts
       </span>
+      @if(userProfile){
       <span
         id="view-saved"
         (click)="postSaved()"
@@ -24,6 +27,7 @@
       >
         saved
       </span>
+    }
     </div>
 
     <hr />
@@ -45,7 +49,7 @@
               [userPfp]="post.userPfp"
             ></app-user-badge>
             <div class="post-time">
-              @if(isAuthenticated && post.username === user?.username) {
+              @if(isAuthenticated && post.username === user?.username && userProfile) {
                 <fa-icon 
                   [icon]="faEllipsisH" 
                   id="faEllipsisH" 
@@ -54,7 +58,7 @@
                 </fa-icon>
                 @if(activePopupId === post._id) {
                   <div class="options-menu" [class.active]="activePopupId === post._id">
-                    <div class="option-item" (click)="editPost(post._id)">
+                    <div class="option-item" routerLink="/post/{{post._id}}/edit">
                       <fa-icon [icon]="faPenToSquare"></fa-icon>
                       Edit
                     </div>

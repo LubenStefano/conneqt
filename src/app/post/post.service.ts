@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy, docData } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy, docData, deleteDoc } from '@angular/fire/firestore';
 import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
 import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { combineLatest, from, Observable, of, throwError } from 'rxjs';
 import { Post } from '../types/post';
-import { arrayRemove, arrayUnion, limit, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, deleteField, limit, updateDoc } from 'firebase/firestore';
 import { Comment } from '../types/comment';
 import { UserService } from '../user/user.service';
 
@@ -84,6 +84,28 @@ export class PostService {
         _id: docRef.id,
       }))
     );
+  }
+  updatePost(postId: string, content: string, img?: string | null): Observable<void> {
+    const postRef = doc(this.firestore, `post/${postId}`);
+    const updateData: Partial<Post> = { content };
+    
+    if (img === null) {
+      // Remove image field from post
+      return from(updateDoc(postRef, { 
+        content,
+        img: deleteField() 
+      }));
+    } else if (img !== undefined) {
+      // Update with new image
+      updateData.img = img;
+    }
+    
+    return from(updateDoc(postRef, updateData));
+  }
+
+  deletePost(postId: string): Observable<void> {
+    const postRef = doc(this.firestore, `post/${postId}`);
+    return from(deleteDoc(postRef));
   }
 
   getPostsByUser(userId: string): Observable<Post[]> {
@@ -209,6 +231,14 @@ export class PostService {
         );
       })
     );
+}
+deleteComment(postId: string, commentId: string): Observable<void> {
+  const postCommentRef = doc(this.firestore, `post/${postId}/comments/${commentId}`);
+  return from(deleteDoc(postCommentRef));
+}
+updateComment(postId: string, commentId: string, content: string): Observable<void> {
+  const commentRef = doc(this.firestore, `post/${postId}/comments/${commentId}`);
+  return from(updateDoc(commentRef, { content }));
 }
 getComments(postId: string): Observable<Comment[]> {
   const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);

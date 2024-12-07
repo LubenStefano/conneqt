@@ -1,0 +1,57 @@
+<main>
+    <div class="edit-container">
+      <h2>Edit Profile</h2>
+      @if(user) {
+        <form #editForm="ngForm" (ngSubmit)="updateProfile(editForm)">
+          <div class="profile-image">
+            <img [src]="selectedImage || user.userPfp" alt="Profile picture">
+            <button type="button" (click)="fileInput.click()">
+              <fa-icon [icon]="faImage"></fa-icon>
+              Change Photo
+            </button>
+            <input
+              type="file"
+              #fileInput
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              style="display: none"
+            >
+          </div>
+
+          @if(showCropper) {
+            <app-image-cropper
+              [imageChangedEvent]="selectedFileEvent"
+              (imageCropped)="onImageCropped($event)"
+              (cropSaved)="onCropSaved()"
+              (cropCancelled)="onCropCancelled()">
+            </app-image-cropper>
+          }
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              [(ngModel)]="username"
+              required
+              minlength="3"
+              #usernameInput="ngModel"
+            >
+            @if (usernameInput.invalid && (usernameInput.dirty || usernameInput.touched)) {
+              <div class="error">Username must be at least 3 characters</div>
+            }
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" [disabled]="editForm.invalid || isSubmitting">
+              Save Changes
+            </button>
+            <button type="button" (click)="cancel()">
+              Cancel
+            </button>
+          </div>
+        </form>
+      }
+    </div>
+  </main>

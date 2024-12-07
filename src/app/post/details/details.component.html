@@ -109,11 +109,11 @@
         </fa-icon>
         @if(activePopupId === comment._id) {
           <div class="options-menu" [class.active]="activePopupId === comment._id">
-            <div class="option-item" (click)="editComment(comment._id)">
+            <div class="option-item" routerLink="/post/{{post._id}}/comment/{{comment._id}}/edit" >
               <fa-icon [icon]="faPenToSquare"></fa-icon>
               Edit
             </div>
-            <div class="option-item delete" (click)="deleteComment(comment._id)">
+            <div class="option-item delete" (click)="deleteComment(post._id, comment._id)">
               <fa-icon [icon]="faTrash"></fa-icon>
               Delete
             </div>

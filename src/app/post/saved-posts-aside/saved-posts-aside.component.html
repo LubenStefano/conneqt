@@ -1,6 +1,6 @@
 <aside>
     <section id="saved-posts">
-        <app-user-badge id="user-info" [username]="currentUser?.displayName || ''" [userPfp]="currentUser?.photoURL || ''" routerLink="/profile"></app-user-badge>
+        <app-user-badge routerLink="/profile/{{currentUser?.uid}}" id="user-info" [username]="currentUser?.displayName || ''" [userPfp]="currentUser?.photoURL || ''" routerLink="/profile"></app-user-badge>
         <div class="sv-posts">
             <div class="sv-header">
                 <fa-icon [icon]="faBookmark"></fa-icon>

@@ -7,11 +7,12 @@ import { UserService } from '../../user/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-create-post-aside',
   standalone: true,
-  imports: [CommonModule, UserBadgeComponent, FontAwesomeModule, FormsModule, ImageCropperComponent],
+  imports: [CommonModule, UserBadgeComponent, FontAwesomeModule, FormsModule, ImageCropperComponent, RouterLink],
   templateUrl: './create-post-aside.component.html',
   styleUrls: ['./create-post-aside.component.css'],
 })
