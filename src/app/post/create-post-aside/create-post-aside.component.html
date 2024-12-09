@@ -32,13 +32,16 @@
           >
           </textarea>
           <div class="cp-buttons">
+            <div>
             <button type="button" (click)="fileInput.click()">
               <fa-icon
+              [ngClass]="{'image-icon-selected': selectedImage, 'image-icon': !selectedImage}"
                 [icon]="faImage"
                 class="image-icon icon-interactive"
               ></fa-icon>
             </button>
-            <button type="submit" [disabled]="!form.valid">
+            </div>
+            <button type="submit">
               <fa-icon
                 [icon]="faArrow"
                 class="arrow-icon icon-interactive"
@@ -57,7 +60,6 @@
     accept="image/*"
     style="display: none"
   />
-
   @if(showCropper) {
   <div class="cropper-modal">
     <app-image-cropper

@@ -4,11 +4,6 @@
       <div class="login-header">
         <fa-icon [icon]="faUser"></fa-icon>
         <h1>Login</h1>
-        @if(errorMessages){
-          <div class="error-box">
-            <p>{{errorMessages}}</p>
-          </div>
-          }
       </div>
       <div class="login-form">
         <form #form="ngForm" (ngSubmit)="login(form)">

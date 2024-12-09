@@ -4,11 +4,6 @@
       <div class="register-header">
         <fa-icon [icon]="faUser"></fa-icon>
         <h1>Register</h1>
-        @if(errorMessages){
-        <div class="error-box">
-          <p>{{errorMessages}}</p>
-        </div>
-        }
       </div>
       <div class="register-form">
         <form #form="ngForm" (ngSubmit)="register(form)">

@@ -8,19 +8,25 @@ import { DetailsComponent } from './post/details/details.component';
 import { EditPostComponent } from './post/edit-post/edit-post.component';
 import { EditCommentComponent } from './post/edit-comment/edit-comment.component';
 import { EditProfileComponent } from './user/edit-profile/edit-profile.component';
+import { authGuard } from './guards/auth.guard';
+import { commentCreatorGuard } from './guards/comment.guard';
+import { notAuthGuard } from './guards/not-auth.guard';
+import { postCreatorGuard } from './guards/post-creator.guard';
+import { profileGuard } from './guards/profile.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  {path: 'login', component: LoginComponent},
-  {path: 'register', component: RegisterComponent},
-  {path: 'profile/:id', component: ProfileComponent},
-  {path: 'profile/:id/edit', component: EditProfileComponent},
-  {path: 'post/:id', component: DetailsComponent, data: { runGuardsAndResolvers: 'always' }},
-  {path: 'post/:id/edit', component: EditPostComponent},
+  {path: 'login', component: LoginComponent, canActivate: [notAuthGuard]},
+  {path: 'register', component: RegisterComponent, canActivate: [notAuthGuard]},
+  {path: 'profile/:id', component: ProfileComponent,canActivate: [authGuard]},
+  {path: 'profile/:id/edit', component: EditProfileComponent, canActivate: [authGuard, profileGuard]},
+  {path: 'post/:id', component: DetailsComponent, runGuardsAndResolvers: 'always', canActivate: [authGuard]},
+  {path: 'post/:id/edit', component: EditPostComponent, canActivate: [authGuard, postCreatorGuard]},
   {
     path: 'post/:postId/comment/:commentId/edit',
-    component: EditCommentComponent
+    component: EditCommentComponent,
+    canActivate: [authGuard, commentCreatorGuard]
   },
   {path: '**', component: ErrorPageComponent}
 ];

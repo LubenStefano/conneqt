@@ -3,6 +3,7 @@ import { Auth, createUserWithEmailAndPassword, updateProfile, User, signOut, onA
 import { arrayRemove, arrayUnion, doc, docData, DocumentReference, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, from, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { ErrorHandlerService } from '../error/error-handling.service'; 
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +11,7 @@ import { catchError, switchMap } from 'rxjs/operators';
 export class UserService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private auth: Auth, private firestore: Firestore) {}
+  constructor(private auth: Auth, private firestore: Firestore,private errorHandler: ErrorHandlerService) {}
 
   register(userData: { email: string; username: string; password: string; img: string }): Observable<void> {
     const { email, username, password, img } = userData;
@@ -49,8 +50,9 @@ export class UserService {
         });
       }),
       catchError((error) => {
-        console.error('Error during login:', error);
-        throw new Error('Login failed');
+        console.error(error.code);
+        
+        throw new Error(error.code);
       })
     );
   }

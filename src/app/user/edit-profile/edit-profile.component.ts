@@ -1,7 +1,6 @@
 // edit-profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faImage } from '@fortawesome/free-regular-svg-icons';
 import { UserService } from '../user.service';
@@ -15,7 +14,6 @@ import { User } from '../../types/user';
   standalone: true,
   imports: [
     FormsModule,
-    UserBadgeComponent,
     FontAwesomeModule,
     ImageCropperComponent,
   ],

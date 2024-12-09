@@ -5,6 +5,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { UserService } from '../user.service';
 import { DEFAULT_USER_IMG } from '../../constants';
+import { ErrorHandlerService } from '../../error/error-handling.service';
 
 @Component({
   selector: 'app-register',
@@ -14,40 +15,43 @@ import { DEFAULT_USER_IMG } from '../../constants';
   styleUrls: ['./register.component.css'], // Fixed typo: styleUrl -> styleUrls
 })
 export class RegisterComponent {
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+     private router: Router,
+     private errorHandler: ErrorHandlerService
+    ) {}
   faUser = faUser;
   regExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$');
-  errorMessages= '';
 
   register(form:NgForm){
     if(!form.valid){
       if(form.value.username === ''){
-        this.errorMessages = 'Username is required';
+       this.errorHandler.showError('Username is required');
         return;
       }
       if(form.value.email === ''){
-        this.errorMessages = 'Email is required';
+        this.errorHandler.showError('Email is required');
         return;
       }
       if(!form.value.email.match(this.regExp)){
-        this.errorMessages = 'Email is invalid';
+        this.errorHandler.showError('Email is invalid');
         return;
       }
       if(form.value.password === ''){
-        this.errorMessages = 'Password is required';
+        this.errorHandler.showError('Password is required');
         return;
       }
       if(form.value.password.length < 6){
-        this.errorMessages = 'Password must be at least 6 characters';
+        this.errorHandler.showError('Password must be at least 6 characters long');
         return;
       }
       if(form.value.rePassword === ''){
-        this.errorMessages = 'Confirm password is required';
+        this.errorHandler.showError('Please re-enter your password');
       }
       return;
     }
     if(form.value.password !== form.value.rePassword){
-      this.errorMessages = 'Passwords do not match';
+      this.errorHandler.showError('Passwords do not match');
       return;
     }
     const user = {
@@ -66,7 +70,27 @@ export class RegisterComponent {
         this.router.navigate(['/home']);
       },
       error: (err: any) => {
-        this.errorMessages = err.message || 'Error occurred during registration';
+        let errorMessage = 'Error occurred during registration';
+        if (err.code) {
+          switch (err.code) {
+            case 'auth/email-already-in-use':
+              errorMessage = 'The email address is already in use by another account.';
+              break;
+            case 'auth/invalid-email':
+              errorMessage = 'The email address is not valid.';
+              break;
+            case 'auth/operation-not-allowed':
+              errorMessage = 'Operation not allowed. Please contact support.';
+              break;
+            case 'auth/weak-password':
+              errorMessage = 'The password is too weak.';
+              break;
+            default:
+              errorMessage = err.message;
+              break;
+          }
+        }
+        this.errorHandler.showError(errorMessage);
       }
     });
   }

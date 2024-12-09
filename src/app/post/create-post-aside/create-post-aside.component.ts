@@ -6,12 +6,14 @@ import {
   faImage,
   faArrowAltCircleRight,
   faPlusSquare,
+  faTimesCircle
 } from '@fortawesome/free-regular-svg-icons';
 import { UserService } from '../../user/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
-import { RouterLink } from '@angular/router';
+import { ErrorHandlerService } from '../../error/error-handling.service';
+
 
 @Component({
   selector: 'app-create-post-aside',
@@ -22,7 +24,6 @@ import { RouterLink } from '@angular/router';
     FontAwesomeModule,
     FormsModule,
     ImageCropperComponent,
-    RouterLink,
   ],
   templateUrl: './create-post-aside.component.html',
   styleUrls: ['./create-post-aside.component.css'],
@@ -31,6 +32,7 @@ export class CreatePostAsideComponent implements OnInit {
   faImage = faImage;
   faArrow = faArrowAltCircleRight;
   faPlus = faPlusSquare;
+  faTimes = faTimesCircle;
 
   username = '';
   userId = '';
@@ -43,7 +45,8 @@ export class CreatePostAsideComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private postService: PostService
+    private postService: PostService,
+    private errorHandler: ErrorHandlerService
   ) {}
 
   ngOnInit() {
@@ -88,7 +91,7 @@ export class CreatePostAsideComponent implements OnInit {
     console.log('Creating post...');
 
     if (!form.valid || !this.userId) {
-      this.errorMessage = 'Content is required!';
+      this.errorHandler.showError('Content is required!');
       return;
     }
 
@@ -128,9 +131,25 @@ export class CreatePostAsideComponent implements OnInit {
         this.selectedFileEvent = null;
       },
       error: (err) => {
-        console.error('Failed to create post:', err);
-        this.errorMessage = 'Failed to create post: ' + err.message;
+        let errorMessage = 'Error occurred during post creation';
+        if (err.code) {
+          switch (err.code) {
+            case 'post/invalid-data':
+              errorMessage = 'Invalid post data.';
+              break;
+            case 'post/creation-failed':
+              errorMessage = 'Post creation failed. Please try again.';
+              break;
+            default:
+              errorMessage = err.message;
+              break;
+          }
+        }
+        this.errorHandler.showError(errorMessage);
       },
     });
+  }
+  removeSelectedFile(): void {
+    this.selectedImage = null;
   }
 }

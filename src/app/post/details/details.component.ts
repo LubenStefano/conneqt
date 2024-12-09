@@ -13,10 +13,11 @@ import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { User } from '../../types/user';
 import { map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Comment } from '../../types/comment';
 import { PostBoxComponent } from '../../shared/post-box/post-box.component';
+import { ErrorHandlerService } from '../../error/error-handling.service';
 
 @Component({
   selector: 'app-details',
@@ -57,7 +58,7 @@ export class DetailsComponent implements OnInit {
     private postService: PostService,
     private userService: UserService,
     private clipboard: Clipboard,
-    private router: Router
+    private errorHandler: ErrorHandlerService
   ) {}
 
   isAuthenticated = false;
@@ -246,7 +247,7 @@ export class DetailsComponent implements OnInit {
       return;
     }
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to comment');
+      this.errorHandler.showError('Please login to comment');
       return;
     }
     if (!userId || !userPfp) {
@@ -254,7 +255,7 @@ export class DetailsComponent implements OnInit {
       return;
     }
     if (!content) {
-      console.error('Comment content is null or undefined');
+      this.errorHandler.showError('Comment content required');
       return;
     }
     if (!displayName) {
@@ -269,7 +270,7 @@ export class DetailsComponent implements OnInit {
           console.log('Comment added:', comment);
           form.resetForm();
         },
-        error: (error) => console.error('Error adding comment:', error),
+        error: (error) => this.errorHandler.showError(error),
       });
   }
 

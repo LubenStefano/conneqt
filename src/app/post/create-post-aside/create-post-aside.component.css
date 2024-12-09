@@ -46,3 +46,6 @@ margin: 10px 0;
     border: none;
     background-color: transparent;
 }
+.image-icon-selected {
+    color: green; /* Color when an image is selected */
+  }
