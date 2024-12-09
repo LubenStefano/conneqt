@@ -1,14 +1,14 @@
 <header>
     <nav>
-        <span id="logo"><a href="home">Conneqt</a></span>
+        <span id="logo"><a routerLink="/home" (click)="scrollToTop()">Conneqt</a></span>
         <ul id="nav-links">
-            <li class="nav-link"><a href="home">Home</a></li>
+            <li class="nav-link"><a routerLink="/home" (click)="scrollToTop()">Home</a></li>
             @if(user){
-                <li class="nav-link"><a href="profile/{{user.uid}}">My Profile</a></li>
-                <li class="nav-link"><a href="#" (click)="onLogout()" >Logout</a></li>
+                <li class="nav-link"><a routerLink="/profile/{{user.uid}}">My Profile</a></li>
+                <li class="nav-link"><a (click)="onLogout()" >Logout</a></li>
             }@else {
-                <li class="nav-link"><a href="login">Login</a></li>
-                <li class="nav-link"><a href="register">Register</a></li>
+                <li class="nav-link"><a routerLink="/login">Login</a></li>
+                <li class="nav-link"><a routerLink="/register">Register</a></li>
             }
         </ul>
     </nav>

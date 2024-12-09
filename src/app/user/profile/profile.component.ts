@@ -1,27 +1,43 @@
-import { Component, OnInit, OnDestroy, HostListener, ChangeDetectorRef } from '@angular/core';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  HostListener,
+  ChangeDetectorRef,
+} from '@angular/core';
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { UserService } from '../user.service';
 import { PostService } from '../../post/post.service';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
 import { FlowHighlightDirective } from './flow-option-highlight.directive';
-import { Subscription, switchMap, tap, of } from 'rxjs';
+import { Subscription, switchMap, tap, of, Observable, map, forkJoin } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostBoxComponent } from '../../shared/post-box/post-box.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, FlowHighlightDirective, RouterLink, PostBoxComponent],
+  imports: [
+    UserBadgeComponent,
+    FontAwesomeModule,
+    FlowHighlightDirective,
+    RouterLink,
+    PostBoxComponent,
+    CommonModule,
+  ],
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-
   activePopupId: string | null = null;
   showOptionsMenu = false;
+
+  userId!: string;
+  routeSub!: Subscription;
 
   likeBubbles: { [key: string]: boolean } = {};
 
@@ -52,7 +68,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.loadUserData();
+    this.routeSub = this.route.params.subscribe(params => {
+      this.userId = params['id'];
+      this.resetUserProfile();
+      this.resetFlow();
+      this.loadUserData();
+    });
   }
 
   loadUserData() {
@@ -61,22 +82,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
       console.error('User ID is null');
       return;
     }
+  
     const user$ = this.userService.getUserById(userId).pipe(
-      tap(user => {
+      tap((user) => {
         this.isAuthenticated = !!user;
         if (user) {
           this.user = {
             uid: user.uid,
             username: user.displayName || 'Unknown User',
             userPfp: user.photoURL || '',
-            savedPosts: Array.isArray((user as any).savedPosts) ? (user as any).savedPosts : [],
-            displayName: user.displayName || undefined,
-            photoURL: user.photoURL || undefined,
-            email: user.email || undefined
+            savedPosts: Array.isArray((user as any).savedPosts)
+              ? (user as any).savedPosts
+              : [],
           };
           this.username = this.user.username;
           this.userPfp = this.user.userPfp;
-          this.userService.getUser().subscribe(currentUser => {
+          this.userService.getUser().subscribe((currentUser) => {
             if (this.user?.uid === currentUser?.uid) {
               this.userProfile = true;
             }
@@ -86,24 +107,41 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.isEmpty = true;
         }
       }),
-      switchMap(user => {
+      switchMap((user) => {
         if (!user) return of([]);
         this.isLoading = true;
         this.isEmpty = false;
-        return this.flow === 'posts' 
-          ? this.postService.getPostsByUser(user.uid)
-          : this.postService.getSavedPosts(this.user?.savedPosts || []);
+  
+        const posts$ =
+          this.flow === 'posts'
+            ? this.postService.getPostsByUser(user.uid)
+            : this.postService.getSavedPosts(this.user?.savedPosts || []);
+  
+        return posts$.pipe(
+          switchMap((posts) => {
+            const updatedPosts$ = posts.map((post) =>
+              this.getUserData(post.uid).pipe(
+                map((userData) => ({
+                  ...post,
+                  username: userData?.username || 'Unknown User',
+                  userPfp: userData?.userPfp || '',
+                  savedPosts: userData?.savedPosts || [],
+                  userId: userData?.uid || '',
+                }))
+              )
+            );
+            return updatedPosts$.length
+              ? forkJoin(updatedPosts$)
+              : of([]);
+          })
+        );
       })
     );
-
+  
     this.subscription.add(
       user$.subscribe({
         next: (posts) => {
-          this.posts = posts.map(post => ({ 
-            ...post, 
-            ...this.user!, 
-            createdAt: new Date(post.createdAt) 
-          }));
+          this.posts = posts;
           this.isLoading = false;
           this.isEmpty = posts.length === 0;
           this.cdr.detectChanges();
@@ -114,10 +152,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.isEmpty = true;
           this.cdr.detectChanges();
-        }
+        },
       })
     );
   }
+  
 
   postFlow() {
     this.flow = 'posts';
@@ -134,15 +173,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       console.log('Please login to like posts');
       return;
     }
-  
+
     const post = this.posts.find((p) => p._id === id);
     if (!post) return;
-  
+
     this.prevLikedState = this.isLiked(post);
     if (!this.prevLikedState) {
       this.likeBubbles[id] = true;
     }
-  
+
     this.postService.likePost(id, this.user.uid).subscribe({
       next: () => {
         if (this.prevLikedState) {
@@ -156,7 +195,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         }
         this.cdr.detectChanges();
       },
-      error: (error) => console.error('Error liking post:', error)
+      error: (error) => console.error('Error liking post:', error),
     });
   }
 
@@ -177,9 +216,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
       next: () => {
         if (this.user) {
           if (isSaved) {
-            this.user.savedPosts = this.user.savedPosts.filter(id => id !== postId);
+            this.user.savedPosts = this.user.savedPosts.filter(
+              (id) => id !== postId
+            );
             if (this.flow === 'saved') {
-              this.posts = this.posts.filter(post => post._id !== postId);
+              this.posts = this.posts.filter((post) => post._id !== postId);
             }
           } else {
             this.user.savedPosts = [...(this.user.savedPosts || []), postId];
@@ -187,7 +228,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.cdr.detectChanges();
         }
       },
-      error: (error) => console.error('Error saving/unsaving post:', error)
+      error: (error) => console.error('Error saving/unsaving post:', error),
     });
   }
 
@@ -204,7 +245,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   sharePost(postId: string) {
     const url = `${window.location.origin}/post/${postId}`;
     this.clipboard.copy(url);
-    
+
     // Show popup for specific post
     this.copiedPostId = postId;
     this.showCopyPopup = true;
@@ -214,6 +255,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.copiedPostId = null;
       this.cdr.detectChanges();
     }, 1000);
+  }
+
+  getUserData(userId: string): Observable<User | null> {
+    return this.userService.getUserById(userId).pipe(
+      map((user) =>
+        user
+          ? {
+              uid: user.uid,
+              username: user.displayName || 'Unknown User',
+              userPfp: user.photoURL || '',
+              savedPosts: Array.isArray((user as any).savedPosts)
+                ? (user as any).savedPosts
+                : [],
+            }
+          : null
+      )
+    );
   }
 
   @HostListener('document:click', ['$event'])
@@ -248,8 +306,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.closeOptionsMenu();
         this.cdr.detectChanges();
       },
-      error: (error) => console.error('Error deleting post:', error)
+      error: (error) => console.error('Error deleting post:', error),
     });
+  }
+
+  resetUserProfile() {
+    this.userProfile = false;
+  }
+
+  resetFlow() {
+    this.flow = 'posts';
   }
 
   ngOnDestroy() {

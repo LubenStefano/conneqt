@@ -43,6 +43,7 @@
       <div class="flow">
         @for (post of posts; track post._id) {
           <app-post-box
+          id="profile-post"
           [post]="post"
           [user]="user"
           [isAuthenticated]="isAuthenticated"
@@ -53,6 +54,7 @@
           [copiedPostId]="copiedPostId"
           [activePopupId]="activePopupId"
           [showOptionsMenu]="showOptionsMenu"
+          [userProfile]="userProfile"
           (likePost)="likePost($event)"
           (savePost)="savePost($event)"
           (sharePost)="sharePost($event)"
@@ -74,6 +76,7 @@
         <div class="flow">
           @for (post of posts; track post._id) {
           <app-post-box
+            id="profile-post"
             [post]="post"
             [user]="user"
             [isAuthenticated]="isAuthenticated"

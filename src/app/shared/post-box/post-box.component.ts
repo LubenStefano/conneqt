@@ -42,6 +42,7 @@ export class PostBoxComponent {
   @Input() showOptionsMenu: boolean = false;
   @Input() showEllipsisMenu: boolean = true;
   @Input() currentUserId: string | undefined;
+  @Input() userProfile: boolean = false; // Add this line
 
   @Output() likePost = new EventEmitter<string>();
   @Output() savePost = new EventEmitter<string>();
@@ -87,6 +88,7 @@ export class PostBoxComponent {
     return (
       this.showEllipsisMenu &&
       this.isAuthenticated &&
+      this.userProfile && // Add this condition
       this.post?.username === this.user?.username
     );
   }

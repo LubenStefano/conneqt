@@ -177,29 +177,28 @@ export class PostService {
 
   getSavedPosts(savedPostIds: string[]): Observable<Post[]> {
     if (!savedPostIds || savedPostIds.length === 0) {
-      return of([]);
+      return of([]); // Return empty array if no saved posts
     }
   
     const posts: Observable<Post>[] = savedPostIds.map(postId => {
-      const postRef = doc(this.firestore, `post/${postId}`);
-      return docData(postRef, { idField: '_id' }).pipe(
-        switchMap((post: any) => {
-          if (!post) return of(null);
-          
+      return this.getPost(postId).pipe(
+        filter(post => post !== null),
+        switchMap(post => {
           return this.userService.getUserByReference(post.creator).pipe(
-            map(creator => ({
+            map(user => ({
               ...post,
-              creatorName: creator?.displayName || 'Unknown User',
-              creatorPfp: creator?.photoURL || 'default-profile-pic-url',
-              uid: creator?.uid || 'unknown',
+              creatorName: user.displayName, // Attach the creator's displayName to the post
+              creatorPfp: user.photoURL, // Attach the creator's photoURL to the post
+              uid: user.uid // Attach the creator's uid to the post
             }))
           );
-        }),
-        filter((post): post is Post => post !== null)
+        })
       );
     });
   
-    return combineLatest(posts);
+    return combineLatest(posts).pipe(
+      map(posts => posts.filter(post => post !== null)) // Remove null posts
+    );
   }
   
   addComment(postId: string, content: string, userId: string, displayName: string, userPfp: string): Observable<Comment> {
