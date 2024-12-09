@@ -1,8 +1,12 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserBadgeComponent } from '../../user/user-badge/user-badge.component';
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faImage, faArrowAltCircleRight, faPlusSquare } from '@fortawesome/free-regular-svg-icons';
+import {
+  faImage,
+  faArrowAltCircleRight,
+  faPlusSquare,
+} from '@fortawesome/free-regular-svg-icons';
 import { UserService } from '../../user/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
@@ -12,7 +16,14 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-create-post-aside',
   standalone: true,
-  imports: [CommonModule, UserBadgeComponent, FontAwesomeModule, FormsModule, ImageCropperComponent, RouterLink],
+  imports: [
+    CommonModule,
+    UserBadgeComponent,
+    FontAwesomeModule,
+    FormsModule,
+    ImageCropperComponent,
+    RouterLink,
+  ],
   templateUrl: './create-post-aside.component.html',
   styleUrls: ['./create-post-aside.component.css'],
 })
@@ -24,7 +35,7 @@ export class CreatePostAsideComponent implements OnInit {
   username = '';
   userId = '';
   userPfp = '';
-  
+
   errorMessage = '';
   selectedImage: string | null = null;
   showCropper = false;
@@ -45,7 +56,7 @@ export class CreatePostAsideComponent implements OnInit {
       error: (error) => {
         console.error('Failed to load user:', error);
         this.errorMessage = 'Failed to load user data';
-      }
+      },
     });
   }
 
@@ -75,7 +86,7 @@ export class CreatePostAsideComponent implements OnInit {
 
   createPost(form: NgForm): void {
     console.log('Creating post...');
-    
+
     if (!form.valid || !this.userId) {
       this.errorMessage = 'Content is required!';
       return;
@@ -93,7 +104,7 @@ export class CreatePostAsideComponent implements OnInit {
         error: (err) => {
           console.error('Failed to upload image:', err);
           this.errorMessage = 'Failed to upload image: ' + err.message;
-        }
+        },
       });
     } else {
       console.log('Creating post without image');
@@ -107,7 +118,7 @@ export class CreatePostAsideComponent implements OnInit {
 
   private submitPost(content: string, imgUrl?: string) {
     console.log('Submitting post:', { content, imgUrl });
-    
+
     this.postService.createPost(content, this.userId, imgUrl).subscribe({
       next: (createdPost) => {
         console.log('Post created successfully:', createdPost);
@@ -119,7 +130,7 @@ export class CreatePostAsideComponent implements OnInit {
       error: (err) => {
         console.error('Failed to create post:', err);
         this.errorMessage = 'Failed to create post: ' + err.message;
-      }
+      },
     });
   }
 }

@@ -16,7 +16,7 @@ export const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'profile/:id', component: ProfileComponent},
   {path: 'profile/:id/edit', component: EditProfileComponent},
-  {path: 'post/:id', component: DetailsComponent},
+  {path: 'post/:id', component: DetailsComponent, data: { runGuardsAndResolvers: 'always' }},
   {path: 'post/:id/edit', component: EditPostComponent},
   {
     path: 'post/:postId/comment/:commentId/edit',

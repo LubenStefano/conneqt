@@ -1,48 +1,37 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { UserBadgeComponent } from '../../user/user-badge/user-badge.component';
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Post } from '../../types/post';
 import { PostService } from '../post.service';
 import { UserService } from '../../user/user.service';
-import { NgClass } from '@angular/common';
 import {
-  faPaperPlane,
-  faComment,
-  faHeart,
-  faBookmark,
   faArrowAltCircleRight,
-  faPenToSquare, 
-  faTrashCan
+  faPenToSquare,
+  faTrashCan,
 } from '@fortawesome/free-regular-svg-icons';
-import {
-  faHeart as faHeartSolid,
-  faBookmark as faBookmarkSolid,
-  faComment as faCommentSolid,
-  faEllipsisH 
-} from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { User } from '../../types/user';
 import { map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Comment } from '../../types/comment';
+import { PostBoxComponent } from '../../shared/post-box/post-box.component';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, FormsModule, RouterLink],
+  imports: [
+    UserBadgeComponent,
+    FontAwesomeModule,
+    FormsModule,
+    RouterLink,
+    PostBoxComponent,
+  ],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
 export class DetailsComponent implements OnInit {
-  faShare = faPaperPlane;
-  faComment = faComment;
-  faCommentSolid = faCommentSolid;
-  showCommentTooltip = false;
-  faHeart = faHeart;
-  faHeartSolid = faHeartSolid;
-  faBookmark = faBookmark;
-  faBookmarkSolid = faBookmarkSolid;
   faArrow = faArrowAltCircleRight;
   faEllipsisH = faEllipsisH;
   faPenToSquare = faPenToSquare;
@@ -54,7 +43,6 @@ export class DetailsComponent implements OnInit {
   user: User | null = null;
   comments: Comment[] = [];
 
-
   prevLikedState: boolean = false;
   prevSavedState: boolean = false;
 
@@ -63,7 +51,6 @@ export class DetailsComponent implements OnInit {
 
   activePopupId: string | null = null;
   showOptionsMenu = false;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -88,7 +75,12 @@ export class DetailsComponent implements OnInit {
           map((user) => ({
             ...post,
             _id: post._id,
-            ...user,
+            username: user.displayName || 'Unknown User', // Add these fields
+            userPfp: user.photoURL || '', // Add these fields
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            uid: user.uid,
+            savedPosts: user.savedPosts || [],
           }))
         )
       )
@@ -214,6 +206,18 @@ export class DetailsComponent implements OnInit {
     return this.user.savedPosts?.includes(postId) ?? false; // Проверка дали постът е запазен
   }
 
+  deletePost(postId: string) {
+    this.postService.deletePost(postId).subscribe({
+      next: () => {
+        if (this.post && this.post._id === postId) {
+          this.post = null;
+        }
+        this.closeOptionsMenu();
+      },
+      error: (error) => console.error('Error deleting post:', error),
+    });
+  }
+
   sharePost(postId: string) {
     const url = `${window.location.origin}/post/${postId}`; // Генериране на линка
     this.clipboard.copy(url); // Копиране в клипборда
@@ -267,7 +271,6 @@ export class DetailsComponent implements OnInit {
         },
         error: (error) => console.error('Error adding comment:', error),
       });
-
   }
 
   @HostListener('document:click', ['$event'])
@@ -278,7 +281,6 @@ export class DetailsComponent implements OnInit {
       this.closeOptionsMenu();
     }
   }
-
 
   toggleOptionsMenu(commentId: string, event: Event) {
     event.stopPropagation();
@@ -292,7 +294,9 @@ export class DetailsComponent implements OnInit {
   deleteComment(postId: string, commentId: string) {
     this.postService.deleteComment(postId, commentId).subscribe({
       next: () => {
-        this.comments = this.comments.filter((comment) => comment._id !== commentId);
+        this.comments = this.comments.filter(
+          (comment) => comment._id !== commentId
+        );
         this.closeOptionsMenu();
       },
       error: (error) => console.error('Error deleting comment:', error),

@@ -9,195 +9,6 @@ main{
    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
    color: #363540;
 }
-.post{
-    display: flex;
-    flex-direction: column;
-    width: 30%;
-    margin: 40px;
-    margin-top: 100px;
-    padding: 20px;
-    margin-bottom: 0;
-}
-.upper-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.post-content{
-    margin: 20px 0;
-}
-.post-content img{
-    width: 100%;
-    border-radius: 15px;
-    margin-top: 15px;
-}
-post-box{
-    margin: 20px 0;
-    background-color:#e3e3e3;
-    border-radius: 15px;
-    padding: 0 20px 20px 20px;
-}
-.post-actions{
-    display: flex;
-    justify-content: space-between;
-}
-
-#likes{
-    position: relative;
-    left: 30px;
-    bottom: 35px;
-    font-family: monospace;
-  }
-
-.heart-icon {
-    transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
-  }
-  
-
-  .liked {
-    color: red; 
-    animation: like-animation 0.4s ease-in-out;
-  }
-  
-  @keyframes like-animation {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1); 
-    }
-  }
-  .like-bubble {
-  position: absolute;
-  color: red;
-  font-size: 20px;
-  pointer-events: none;
-  animation: float-to-likes 0.8s ease-out forwards;
-}
-
-@keyframes float-to-likes {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: translate(15px, -15px) scale(0.8);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(30px, -35px) scale(0.5);
-  }
-}
-
-.likes-update {
-  animation: likes-bump 0.3s ease;
-}
-  
-  .changing {
-    transition: none; 
-  }
-
-  .bookmark-icon {
-    transition: color 0.2s ease;
-    cursor: pointer;
-    color: #262626;
-  }
-  
-  .bookmark-icon.saved {
-    color: #f6d100;
-    animation: save-animation 0.4s ease-in-out;
-  }
-@keyframes save-animation {
-    0% {
-        transform: scale(1) rotate(0deg);
-    }
-    25% {
-        transform: scale(1.1) rotate(-10deg);
-    }
-    50% {
-        transform: scale(1.2) rotate(10deg);
-    }
-    75% {
-        transform: scale(1.1) rotate(-10deg);
-    }
-    100% {
-        transform: scale(1) rotate(0deg);
-    }
-}
-
-/* In post-flow.component.css */
-.copy-popup {
-  position: absolute;
-  background: #333;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  bottom: 100%;
-  left: 70%;
-  transform: translateX(-50%);
-  animation: fadeInOut 1s ease-in-out;
-  white-space: nowrap;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px);
-  }
-  15% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  85% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
-  }
-}
-.comment-icon{
-  color: green;
-}
-.comment-tooltip {
-  position: absolute;
-  background: #333;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  white-space: nowrap;
-  animation: fadeIn 0.2s ease-in-out;
-}
-
-.comment-icon.active {
-  color: #4CAF50;
-  transition: color 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-.post-actions {
-  position: relative;
-}
 .comment-form {
   display: flex;
   flex-direction: column;
@@ -237,6 +48,11 @@ margin: 10px 0;
 }
 .arrow-icon{
   font-size: 30px;
+  transition: 0.2s ease;
+}
+.arrow-icon:hover{
+  color: blue;
+  transition: 0.2s ease;
 }
 
 hr{
@@ -368,4 +184,8 @@ hr{
 .option-item.delete:hover {
   color: #dc3545;
   background-color: #ffeaea;
+}
+app-post-box{
+  margin-top: 5%;
+  width: 30%;
 }

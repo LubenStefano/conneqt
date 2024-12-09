@@ -1,48 +1,53 @@
 <aside>
-    <section id="saved-posts">
-        <app-user-badge routerLink="/profile/{{currentUser?.uid}}" id="user-info" [username]="currentUser?.displayName || ''" [userPfp]="currentUser?.photoURL || ''" routerLink="/profile"></app-user-badge>
-        <div class="sv-posts">
-            <div class="sv-header">
-                <fa-icon [icon]="faBookmark"></fa-icon>
-                <h3>saved posts</h3>
+  <section id="saved-posts">
+    <app-user-badge
+    id="user-info"
+      [uid]="currentUser?.uid || ''"
+      [username]="currentUser?.displayName || ''"
+      [userPfp]="currentUser?.photoURL || ''"
+    ></app-user-badge>
+    <div class="sv-posts">
+      <div class="sv-header">
+        <fa-icon [icon]="faBookmark"></fa-icon>
+        <h3>saved posts</h3>
+      </div>
+      <div class="sv-body">
+        @if (isLoading) {
+        <div class="loading">Loading saved posts...</div>
+        } @else if (savedPosts.length === 0) {
+        <div class="no-posts">No saved posts yet</div>
+        } @else { @for (savedPost of savedPosts; track $index) {
+        <div class="post sv-post">
+          <div class="upper-header">
+            <div id="sv-user">
+              <app-user-badge
+                [username]="savedPost.creatorName || ''"
+                [userPfp]="savedPost.creatorPfp || ''"
+                [uid]="savedPost.uid || ''"
+              >
+              </app-user-badge>
             </div>
-            <div class="sv-body">
-                @if (isLoading) {
-                    <div class="loading">Loading saved posts...</div>
-                } @else if (savedPosts.length === 0) {
-                    <div class="no-posts">No saved posts yet</div>
-                } @else {
-                    @for (savedPost of savedPosts; track $index) {
-                    <div class="post sv-post">
-                        <div class="upper-header">
-                            <div id="sv-user">
-                                <app-user-badge 
-                                        [username]="savedPost.creatorName || ''"
-                                        [userPfp]="savedPost.creatorPfp || ''">
-                                    </app-user-badge>
-                            </div>
-                            <fa-icon 
-                            [icon]="faXmark" 
-                            class="icon-close icon-interactive"
-                            (click)="unsavePost(savedPost._id)">
-                        </fa-icon>
-                        </div>
-                        <div class="post-content" routerLink="/post/{{ savedPost._id }}">
-                            @if(savedPost.img) {
-                                <img [src]="savedPost.img" alt="Post Image" />
-                            }
-                            <div class="post-text-content">
-                            {{ savedPost.content }}
-                            </div>
-                        </div>
-                        <div class="post-time">
-                            <span>{{savedPost.date}}</span>
-                        </div>
-                    </div>
-                }
+            <fa-icon
+              [icon]="faXmark"
+              class="icon-close icon-interactive"
+              (click)="unsavePost(savedPost._id)"
+            >
+            </fa-icon>
+          </div>
+          <div class="post-content" routerLink="/post/{{ savedPost._id }}">
+            @if(savedPost.img) {
+            <img [src]="savedPost.img" alt="Post Image" />
             }
+            <div class="post-text-content">
+              {{ savedPost.content }}
             </div>
+          </div>
+          <div class="post-time">
+            <span>{{ savedPost.date }}</span>
+          </div>
         </div>
-
-    </section>
+        } }
+      </div>
+    </div>
+  </section>
 </aside>

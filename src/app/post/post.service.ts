@@ -68,6 +68,7 @@ export class PostService {
       likes: [],
       createdAt: new Date(),
       _id: '',
+      uid: creatorId,
       commentAmount: 0, // Initialize to 0
     };
   
@@ -189,7 +190,8 @@ export class PostService {
             map(creator => ({
               ...post,
               creatorName: creator?.displayName || 'Unknown User',
-              creatorPfp: creator?.photoURL || 'default-profile-pic-url'
+              creatorPfp: creator?.photoURL || 'default-profile-pic-url',
+              uid: creator?.uid || 'unknown',
             }))
           );
         }),
@@ -200,25 +202,22 @@ export class PostService {
     return combineLatest(posts);
   }
   
-  addComment(postId: string, content: string, userId: string,displayName:string, userPfp: string): Observable<Comment> {
+  addComment(postId: string, content: string, userId: string, displayName: string, userPfp: string): Observable<Comment> {
     const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
     const date = this.formatDate(new Date());
     const creatorRef = doc(this.firestore, `users/${userId}`);
-
+  
     const commentData = {
-      _id: '' ,// Placeholder ID
+      _id: '',
       content: content,
-      creator: creatorRef,
-      displayName: displayName,
-      userPfp: userPfp,
+      creator: creatorRef,  // Store only the reference
       uid: userId,
       createdAt: new Date(),
       date: date,
     };
-
+  
     return from(addDoc(postCommentsCollection, commentData)).pipe(
       switchMap((docRef) => {
-        // Get current comments count and update post
         return this.getComments(postId).pipe(
           tap(comments => {
             const commentAmount = comments.length;
@@ -231,7 +230,7 @@ export class PostService {
         );
       })
     );
-}
+  }
 deleteComment(postId: string, commentId: string): Observable<void> {
   const postCommentRef = doc(this.firestore, `post/${postId}/comments/${commentId}`);
   return from(deleteDoc(postCommentRef));
@@ -245,17 +244,22 @@ getComments(postId: string): Observable<Comment[]> {
   const postCommentsQuery = query(postCommentsCollection, orderBy('createdAt', 'desc'));
 
   return collectionData(postCommentsQuery, { idField: '_id' }).pipe(
-    map((comments: any[]) => {
-      const mappedComments = comments.map(comment => ({
-        ...comment,
-        createdAt: comment.createdAt.toDate(),
-        _id: comment._id || '',
-      }));
-      
-      // Update comment amount
-      this.updateCommentAmount(postId, mappedComments.length).subscribe();
-      
-      return mappedComments;
+    switchMap((comments: any[]) => {
+      const commentWithUserData = comments.map(comment => 
+        this.userService.getUserByReference(comment.creator).pipe(
+          map(user => ({
+            ...comment,
+            createdAt: comment.createdAt.toDate(),
+            _id: comment._id || '',
+            displayName: user.displayName || 'Unknown User',
+            userPfp: user.photoURL || ''
+          }))
+        )
+      );
+      return combineLatest(commentWithUserData);
+    }),
+    tap((comments: Comment[]) => {
+      this.updateCommentAmount(postId, comments.length).subscribe();
     })
   );
 }

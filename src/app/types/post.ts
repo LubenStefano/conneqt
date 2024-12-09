@@ -6,6 +6,7 @@ export interface Post {
   creator: DocumentReference;
   creatorName?: string; 
   creatorPfp?: string; 
+  uid: string;
   date: string; 
   img?: string; 
   likes: string[]; 

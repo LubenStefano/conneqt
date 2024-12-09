@@ -1,0 +1,79 @@
+<div class="post">
+  <div class="upper-header">
+    <app-user-badge
+      [username]="post?.username || ''"
+      [userPfp]="post?.userPfp || ''"
+      [uid]="post?.uid || ''"
+    ></app-user-badge>
+    <div class="post-time" [ngClass]="{ 'no-ellipsis': !showEllipsis }">
+      <span>{{ post?.date }}</span>
+      @if(isAuthenticated && post?.username === user?.username && isCurrentUserAuthor()){
+        @if(showEllipsis){
+          <fa-icon 
+            [icon]="faEllipsisH" 
+            id="faEllipsisH" 
+            class="icon-interactive"
+            (click)="toggleOptionsMenu.emit({ postId: post?._id!, event: $event })">
+          </fa-icon>
+        }
+      }
+      @if(activePopupId === post?._id){
+        <div class="options-menu" [class.active]="activePopupId === post?._id">
+          <div class="option-item" routerLink="/post/{{post?._id}}/edit">
+            <fa-icon [icon]="faPenToSquare"></fa-icon>
+            Edit
+          </div>
+          <div class="option-item delete" (click)="deletePost.emit(post?._id!)">
+            <fa-icon [icon]="faTrash"></fa-icon>
+            Delete
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+  <div class="post-box">
+    <div class="post-content">
+      <p>{{ post?.content }}</p>
+      @if(post?.img){
+        <img [src]="post?.img" alt="Post Image" />
+      }
+    </div>
+    @if(isAuthenticated){
+      <div class="post-actions">
+        <fa-icon
+          [icon]="isLiked(post!) ? faHeartSolid : faHeart"
+          class="heart-icon icon-interactive"
+          [ngClass]="{
+            liked: isLiked(post!),
+            changing: isLiked(post!) !== prevLikedState
+          }"
+          (click)="likePost.emit(post?._id!)"
+        ></fa-icon>
+        @if(likeBubbles[post?._id!]){
+          <span class="like-bubble">♥</span>
+        }
+        <fa-icon
+          [icon]="faComment"
+          class="comment-icon icon-interactive"
+          routerLink="/post/{{ post?._id }}"
+        ></fa-icon>
+        <fa-icon
+          [icon]="faShare"
+          class="share-icon icon-interactive"
+          (click)="sharePost.emit(post?._id!)"
+        ></fa-icon>
+        @if(showCopyPopup && copiedPostId === post?._id){
+          <div class="copy-popup">Copied to clipboard!</div>
+        }
+        <fa-icon
+          [icon]="isSaved(post?._id!) ? faBookmarkSolid : faBookmark"
+          class="bookmark-icon icon-interactive"
+          [ngClass]="{ saved: isSaved(post?._id!) }"
+          (click)="savePost.emit(post?._id!)"
+        ></fa-icon>
+      </div>
+      <p id="likes">{{ post?.likes?.length || 0 }}</p>
+      <p id="comments">{{ post?.commentAmount || 0 }}</p>
+    }
+  </div>
+</div>

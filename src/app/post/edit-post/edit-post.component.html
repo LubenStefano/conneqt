@@ -4,7 +4,11 @@
     @if (post && user) {
     <form #editForm="ngForm" (ngSubmit)="updatePost(editForm)">
       <div class="form-header">
-        <app-user-badge [username]="user.username" [userPfp]="user.userPfp">
+        <app-user-badge
+          [username]="user.username"
+          [userPfp]="user.userPfp"
+          [uid]="user.uid || ''"
+        >
         </app-user-badge>
       </div>
 
@@ -29,21 +33,21 @@
         <div class="current-image">
           <img [src]="selectedImage || photo" alt="Post image" />
           <div class="image-actions">
-          <button type="button" class="remove-image" (click)="removeImage()">
-            <fa-icon
-            [icon]="faTrash"
-            class="trash-icon icon-interactive"
-          ></fa-icon>
-            Remove Image
-          </button>
-          <button type="button" (click)="fileInput.click()">
+            <button type="button" class="remove-image" (click)="removeImage()">
               <fa-icon
-              [icon]="faImage"
-              class="image-icon icon-interactive"
+                [icon]="faTrash"
+                class="trash-icon icon-interactive"
+              ></fa-icon>
+              Remove Image
+            </button>
+            <button type="button" (click)="fileInput.click()">
+              <fa-icon
+                [icon]="faImage"
+                class="image-icon icon-interactive"
               ></fa-icon>
               {{ photo || selectedImage ? "Change Image" : "Add Image" }}
             </button>
-        </div>
+          </div>
         </div>
         }
         <input

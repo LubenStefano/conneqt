@@ -1,72 +1,30 @@
 <main>
   @if(post) {
-  <div class="post">
-    <div class="upper-header">
-      <app-user-badge
-        [username]="post.displayName || ''"
-        [userPfp]="post.photoURL || ''"
-      ></app-user-badge>
-      <div class="post-time">
-        <span>{{ post.date }}</span>
-      </div>
-    </div>
-    <div class="post-box">
-      <div class="post-content">
-        <p>{{ post.content }}</p>
-        @if (post.img) {
-        <img [src]="post.img" alt="Post Image" />
-        }
-      </div>
-      @if (isAuthenticated) {
-      <div class="post-actions">
-        <fa-icon
-          [icon]="isLiked(post) ? faHeartSolid : faHeart"
-          class="heart-icon icon-interactive"
-          [ngClass]="{
-            liked: isLiked(post),
-            changing: isLiked(post) !== prevLikedState
-          }"
-          (click)="likePost(post._id)"
-        ></fa-icon>
-        @if(likeBubbles[post._id]) {
-        <span class="like-bubble">♥</span>
-        }
-        <fa-icon
-          [icon]="showCommentTooltip ? faCommentSolid : faComment"
-          class="comment-icon icon-interactive"
-          [ngClass]="{ active: showCommentTooltip }"
-          (mouseenter)="showCommentTooltip = true"
-          (mouseleave)="showCommentTooltip = false"
-        >
-        </fa-icon>
-        @if(showCommentTooltip) {
-        <div class="comment-tooltip">You are in comments section</div>
-        }
-        <fa-icon
-          [icon]="faShare"
-          class="share-icon icon-interactive"
-          (click)="sharePost(post._id)"
-        ></fa-icon>
-        @if (showCopyPopup && copiedPostId === post._id) {
-        <div class="copy-popup">Copied to clipboard!</div>
-        }
-        <fa-icon
-          [icon]="isSaved(post._id) ? faBookmarkSolid : faBookmark"
-          class="bookmark-icon icon-interactive"
-          [ngClass]="{ saved: isSaved(post._id) }"
-          (click)="savePost(post._id)"
-        ></fa-icon>
-      </div>
-      <p id="likes">{{ post.likes.length }}</p>
-      <p id="comments">{{ post.commentAmount }}</p>
-      }
-    </div>
-  </div>
-    <hr>  
+    <app-post-box
+    id="details-post"
+    [post]="post"
+    [user]="user"
+    [isAuthenticated]="isAuthenticated"
+    [likeBubbles]="likeBubbles"
+    [prevLikedState]="prevLikedState"
+    [prevSavedState]="prevSavedState"
+    [showCopyPopup]="showCopyPopup"
+    [copiedPostId]="copiedPostId"
+    [activePopupId]="activePopupId"
+    [showOptionsMenu]="showOptionsMenu"
+    (likePost)="likePost($event)"
+    (savePost)="savePost($event)"
+    (sharePost)="sharePost($event)"
+    (toggleOptionsMenu)="toggleOptionsMenu($event.postId, $event.event)"
+    (closeOptionsMenu)="closeOptionsMenu()"
+    (deletePost)="deletePost($event)"
+></app-post-box>
+  <hr />
   <div class="comment-form">
     <app-user-badge
-      [username]="user?.displayName || ''"
-      [userPfp]="user?.userPfp || ''"
+      [username]="user?.username || ''"
+      [userPfp]="user?.photoURL || ''"
+      [uid]="post.uid || ''"
     ></app-user-badge>
     <form #form="ngForm" (ngSubmit)="comment(form)">
       <textarea
@@ -96,30 +54,40 @@
     @for (comment of comments; track comment._id) {
     <div class="comment">
       <div class="comment-header">
-      <app-user-badge
-        [username]="comment.displayName || ''"
-        [userPfp]="comment.userPfp || ''"
-      ></app-user-badge>
-      @if(isAuthenticated && comment.displayName === user?.username) {
-        <fa-icon 
-          [icon]="faEllipsisH" 
-          id="faEllipsisH" 
+        <app-user-badge
+          [username]="comment.displayName || ''"
+          [userPfp]="comment.userPfp || ''"
+          [uid]="comment.uid || ''"
+        ></app-user-badge>
+        @if(isAuthenticated && comment.displayName === user?.username) {
+        <fa-icon
+          [icon]="faEllipsisH"
+          id="faEllipsisH"
           class="icon-interactive"
-          (click)="toggleOptionsMenu(comment._id, $event)">
+          (click)="toggleOptionsMenu(comment._id, $event)"
+        >
         </fa-icon>
         @if(activePopupId === comment._id) {
-          <div class="options-menu" [class.active]="activePopupId === comment._id">
-            <div class="option-item" routerLink="/post/{{post._id}}/comment/{{comment._id}}/edit" >
-              <fa-icon [icon]="faPenToSquare"></fa-icon>
-              Edit
-            </div>
-            <div class="option-item delete" (click)="deleteComment(post._id, comment._id)">
-              <fa-icon [icon]="faTrash"></fa-icon>
-              Delete
-            </div>
+        <div
+          class="options-menu"
+          [class.active]="activePopupId === comment._id"
+        >
+          <div
+            class="option-item"
+            routerLink="/post/{{ post._id }}/comment/{{ comment._id }}/edit"
+          >
+            <fa-icon [icon]="faPenToSquare"></fa-icon>
+            Edit
           </div>
-        }
-      }
+          <div
+            class="option-item delete"
+            (click)="deleteComment(post._id, comment._id)"
+          >
+            <fa-icon [icon]="faTrash"></fa-icon>
+            Delete
+          </div>
+        </div>
+        } }
       </div>
       <div class="comment-content">
         <p>{{ comment.content }}</p>

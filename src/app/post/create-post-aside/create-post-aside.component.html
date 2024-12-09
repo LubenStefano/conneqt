@@ -6,12 +6,16 @@
     </div>
 
     @if(errorMessage) {
-      <div class="error-message">{{ errorMessage }}</div>
+    <div class="error-message">{{ errorMessage }}</div>
     }
 
     <div class="cp-body">
       <div id="cp-user">
-        <app-user-badge routerLink="/profile/{{userId}}" [username]="username" [userPfp]="userPfp" ></app-user-badge>
+        <app-user-badge
+          [uid]="userId"
+          [username]="username"
+          [userPfp]="userPfp"
+        ></app-user-badge>
       </div>
 
       <div class="cp-form">
@@ -24,14 +28,21 @@
             cols="30"
             rows="10"
             required
-            placeholder="Write here...">
+            placeholder="Write here..."
+          >
           </textarea>
           <div class="cp-buttons">
             <button type="button" (click)="fileInput.click()">
-              <fa-icon [icon]="faImage" class="image-icon icon-interactive"></fa-icon>
+              <fa-icon
+                [icon]="faImage"
+                class="image-icon icon-interactive"
+              ></fa-icon>
             </button>
             <button type="submit" [disabled]="!form.valid">
-              <fa-icon [icon]="faArrow" class="arrow-icon icon-interactive"></fa-icon>
+              <fa-icon
+                [icon]="faArrow"
+                class="arrow-icon icon-interactive"
+              ></fa-icon>
             </button>
           </div>
         </form>
@@ -44,17 +55,18 @@
     #fileInput
     (change)="onFileSelected($event)"
     accept="image/*"
-    style="display: none;"
+    style="display: none"
   />
 
   @if(showCropper) {
-    <div class="cropper-modal">
-      <app-image-cropper
-        [imageChangedEvent]="selectedFileEvent"
-        (imageCropped)="onImageCropped($event)"
-        (cropSaved)="onCropSaved()"
-        (cropCancelled)="onCropCancelled()">
-      </app-image-cropper>
-    </div>
+  <div class="cropper-modal">
+    <app-image-cropper
+      [imageChangedEvent]="selectedFileEvent"
+      (imageCropped)="onImageCropped($event)"
+      (cropSaved)="onCropSaved()"
+      (cropCancelled)="onCropCancelled()"
+    >
+    </app-image-cropper>
+  </div>
   }
 </aside>

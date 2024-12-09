@@ -1,4 +1,5 @@
 import { Component, Input} from '@angular/core';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -11,4 +12,11 @@ import { Component, Input} from '@angular/core';
 export class UserBadgeComponent {
   @Input() username: string = '';
   @Input() userPfp: string = '';
+  @Input() uid: string = '';
+
+  constructor(private router: Router) {}
+
+  goToProfile(){
+    this.router.navigate(['/profile', this.uid]);
+  }
 }

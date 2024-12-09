@@ -1,37 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { UserBadgeComponent } from '../../user/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Post } from '../../types/post';
 import { PostService } from '../post.service';
 import { UserService } from '../../user/user.service';
-import { NgClass } from '@angular/common';
-import {
-  faPaperPlane,
-  faComment,
-  faHeart,
-  faBookmark,
-} from '@fortawesome/free-regular-svg-icons';
-import { faHeart as faHeartSolid, faBookmark as faBookmarkSolid } from '@fortawesome/free-solid-svg-icons'; 
 import { User } from '../../types/user';
 import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
-import { RouterLink } from '@angular/router';
+import { PostBoxComponent } from '../../shared/post-box/post-box.component';
 
 @Component({
   selector: 'app-post-flow',
   standalone: true,
-  imports: [UserBadgeComponent, FontAwesomeModule, NgClass, RouterLink],
+  imports: [FontAwesomeModule, PostBoxComponent],
   templateUrl: './post-flow.component.html',
   styleUrls: ['./post-flow.component.css'],
 })
 export class PostFlowComponent implements OnInit {
-  // Icons
-  faShare = faPaperPlane;
-  faComment = faComment;
-  faHeart = faHeart; 
-  faHeartSolid = faHeartSolid; 
-  faBookmark = faBookmark;
-  faBookmarkSolid = faBookmarkSolid;
 
   likeBubbles: {[key: string]: boolean} = {};
 
