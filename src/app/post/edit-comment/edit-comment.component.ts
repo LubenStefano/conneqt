@@ -8,12 +8,11 @@ import { Comment } from '../../types/comment';
 import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
 import { switchMap, tap } from 'rxjs';
 import { User } from '../../types/user';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-edit-comment',
   standalone: true,
-  imports: [FontAwesomeModule, FormsModule, UserBadgeComponent, NgIf],
+  imports: [FontAwesomeModule, FormsModule, UserBadgeComponent],
   templateUrl: './edit-comment.component.html',
   styleUrl: './edit-comment.component.css',
 })

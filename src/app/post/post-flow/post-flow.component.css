@@ -1,17 +1,90 @@
-/* main */
-main{
+/* Main container */
+main {
     display: flex;
     flex: 1;
-   height: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    width: 100%;
+    flex-direction: column;
 }
-#main-flow{
+.auth-prompt{
+    font-family: "Offside", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 50px;
-    padding-right: 15%;
-    width: 600px;
-}
-app-post-box{
+    justify-content: center;
+    background-color: rgba(236, 145, 0, 0.718);
+    padding: 2%;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    height: 100%;
     width: 100%;
+}
+.auth-prompt:hover{
+    background-color: rgb(255, 157, 0, 0.8);
+}
+/* Flow container */
+#main-flow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 1rem;
+    margin-right: 100px;
+    width: 500px;
+    box-sizing: border-box;
+}
+.margin-top {
+    margin-top: 50px;
+}
+
+/* Post box */
+app-post-box {
+    width: 100%;
+}
+
+/* Responsive Design */
+@media (max-width: 1300px) {
+    #main-flow {
+        margin-right: 70px;
+        width: 400px;
+    }
+}
+
+@media (max-width: 900px) {
+    #main-flow {
+        margin-right: 0;
+        padding: 0 10px;
+        width: 300px;
+    }
+    .margin-top {
+        margin-top: 290px;
+    }
+}
+
+@media (max-width: 768px) {
+    #main-flow {
+        margin-right: 0;
+        margin-top: 80px; /* Adjusted margin-top for small screens */
+        max-width: 500px; /* Adjusted max-width for small screens */
+    }
+    .margin-top {
+        margin-top: 290px;
+    }
+}
+
+@media (max-width: 480px) {
+    #main-flow {
+        margin-right: 0;
+        margin-top: 60px; /* Adjusted margin-top for very small screens */
+        max-width: 100%; /* Full width for very small screens */
+    }
+    .margin-top {
+        margin-top: 290px;
+    }
 }

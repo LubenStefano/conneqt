@@ -1,15 +1,22 @@
 <header>
     <nav>
         <span id="logo"><a routerLink="/home" (click)="scrollToTop()">Conneqt</a></span>
-        <ul id="nav-links">
+        
+        <div class="hamburger-menu" [class.open]="isMenuOpen" (click)="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <ul id="nav-links" [class.open]="isMenuOpen">
             <li class="nav-link"><a routerLink="/home" (click)="scrollToTop()">Home</a></li>
             @if(user){
                 <li class="nav-link"><a routerLink="/profile/{{user.uid}}">My Profile</a></li>
-                <li class="nav-link"><a (click)="onLogout()" >Logout</a></li>
+                <li class="nav-link"><a href="" (click)="onLogout()" >Logout</a></li>
             }@else {
                 <li class="nav-link"><a routerLink="/login">Login</a></li>
                 <li class="nav-link"><a routerLink="/register">Register</a></li>
             }
         </ul>
     </nav>
-    </header>
+</header>

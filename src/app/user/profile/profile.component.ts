@@ -243,17 +243,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   sharePost(postId: string) {
-    const url = `${window.location.origin}/post/${postId}`;
+    const baseUrl = window.location.href.replace(/\/profile\/.*$/, '');
+    const url = `${baseUrl}/post/${postId}`;
     this.clipboard.copy(url);
-
+    
     // Show popup for specific post
     this.copiedPostId = postId;
     this.showCopyPopup = true;
 
+    // Hide popup after 2 seconds
     setTimeout(() => {
       this.showCopyPopup = false;
       this.copiedPostId = null;
-      this.cdr.detectChanges();
     }, 1000);
   }
 

@@ -19,7 +19,8 @@
     (closeOptionsMenu)="closeOptionsMenu()"
     (deletePost)="deletePost($event)"
 ></app-post-box>
-  <hr />
+  <hr/>
+  @if(isAuthenticated){
   <div class="comment-form">
     <app-user-badge
       [username]="user?.username || ''"
@@ -48,7 +49,7 @@
       </div>
     </form>
   </div>
-
+  }
   @if(comments){
   <div class="comments">
     @for (comment of comments; track comment._id) {

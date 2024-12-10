@@ -220,19 +220,21 @@ export class DetailsComponent implements OnInit {
   }
 
   sharePost(postId: string) {
-    const url = `${window.location.origin}/post/${postId}`; // Генериране на линка
-    this.clipboard.copy(url); // Копиране в клипборда
+    const url = `${window.location.href}`; // Generate the full link
+    navigator.clipboard.writeText(url).then(() => {
+        // Show confirmation popup
+        this.copiedPostId = postId;
+        this.showCopyPopup = true;
 
-    // Показваме попъп за потвърждение
-    this.copiedPostId = postId;
-    this.showCopyPopup = true;
-
-    // Скриване на попъпа след 2 секунди
-    setTimeout(() => {
-      this.showCopyPopup = false;
-      this.copiedPostId = null;
-    }, 1000);
-  }
+        // Hide the popup after 2 seconds
+        setTimeout(() => {
+            this.showCopyPopup = false;
+            this.copiedPostId = null;
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+    });
+}
   comment(form: NgForm) {
     const postId = this.post?._id;
     const content = form.value.commentContent;

@@ -3,7 +3,9 @@
   justify-content: center;
   align-items: center;
   height: 90vh;
+  margin-top: 60px;
 }
+
 .login-header {
   position: relative;
   bottom: 60px;
@@ -11,12 +13,14 @@
   flex-direction: column;
   align-items: center;
 }
+
 .login-header h1 {
   font-size: 40px;
   font-weight: 500;
   font-family: "Offside", sans-serif;
   color: #363540;
 }
+
 .login-header fa-icon {
   padding: 20px 25px 20px 25px;
   margin-bottom: 30px;
@@ -26,6 +30,7 @@
   background-color: white;
   color: #363540;
 }
+
 .login-box {
   display: flex;
   flex-direction: column;
@@ -36,6 +41,7 @@
   width: 25%;
   transition: 0.2s ease-in-out;
 }
+
 .login-box:focus-within {
   box-shadow: 10px 10px 15px rgba(101, 99, 117, 0.952);
 }
@@ -47,12 +53,14 @@
   margin-bottom: 40px;
   width: 100%;
 }
+
 .input-box label {
   font-size: 20px;
   font-weight: 500;
   font-family: "Offside", sans-serif;
   margin: 10px 0;
 }
+
 .input-box input {
   width: 100%;
   margin: 0 10px 10px 10px;
@@ -61,12 +69,15 @@
   border: 1px solid #363540;
   outline: none;
 }
+
 .input-box input:focus {
   border: 2px solid #363540;
 }
+
 .input-box fa-icon {
   font-size: 25px;
 }
+
 .login-buttons button {
   display: flex;
   justify-content: center;
@@ -74,6 +85,7 @@
   margin-top: 20px;
   width: 100%;
 }
+
 #register-call {
   display: flex;
   justify-content: center;
@@ -81,6 +93,7 @@
   margin-top: 10px;
   margin-bottom: 20px;
 }
+
 #register-call a {
   font-weight: 500;
   font-family: "Offside", sans-serif;
@@ -89,9 +102,11 @@
   margin-left: 10px;
   transition: 0.1s ease-in-out;
 }
+
 #register-call a:hover {
   color: #9a9a9a;
 }
+
 #login-button {
   background-color: #363540;
   color: white;
@@ -104,14 +119,67 @@
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
+
 #login-button:hover {
   background-color: #b5b5b5;
   color: #363540;
 }
+
 .error-message {
   color: red;
   font-size: 15px;
   font-weight: 500;
   font-family: "Offside", sans-serif;
   margin-top: 10px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1200px) {
+  .login-box {
+      width: 35%;
+  }
+}
+
+@media (max-width: 992px) {
+  .login-box {
+      width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .login-box {
+      width: 70%;
+  }
+
+  .login-header h1 {
+      font-size: 30px;
+  }
+
+  .login-header fa-icon {
+      font-size: 40px;
+  }
+
+  #login-button {
+      padding: 10px 30px;
+      font-size: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .login-box {
+      width: 90%;
+  }
+
+  .login-header h1 {
+      font-size: 25px;
+  }
+
+  .login-header fa-icon {
+      font-size: 30px;
+  }
+
+  #login-button {
+      padding: 10px 20px;
+      font-size: 16px;
+  }
 }

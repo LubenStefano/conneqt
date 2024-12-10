@@ -1,7 +1,7 @@
 <aside>
   <section id="saved-posts">
     <app-user-badge
-    id="user-info"
+      id="user-info"
       [uid]="currentUser?.uid || ''"
       [username]="currentUser?.displayName || ''"
       [userPfp]="currentUser?.photoURL || ''"
@@ -34,7 +34,8 @@
             >
             </fa-icon>
           </div>
-          <div class="post-content" routerLink="/post/{{ savedPost._id }}">
+          <div routerLink="/post/{{ savedPost._id }}">
+          <div class="post-content">
             @if(savedPost.img) {
             <img [src]="savedPost.img" alt="Post Image" />
             }
@@ -44,6 +45,7 @@
           </div>
           <div class="post-time">
             <span>{{ savedPost.date }}</span>
+          </div>
           </div>
         </div>
         } }

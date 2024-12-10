@@ -7,11 +7,13 @@ import { User } from '../../types/user';
 import { combineLatest, map, switchMap, tap } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { PostBoxComponent } from '../../shared/post-box/post-box.component';
+import { RouterLink } from '@angular/router';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-post-flow',
   standalone: true,
-  imports: [FontAwesomeModule, PostBoxComponent],
+  imports: [FontAwesomeModule, PostBoxComponent, NgClass, RouterLink],
   templateUrl: './post-flow.component.html',
   styleUrls: ['./post-flow.component.css'],
 })
@@ -162,7 +164,8 @@ export class PostFlowComponent implements OnInit {
   }
 
   sharePost(postId: string) {
-    const url = `${window.location.origin}/post/${postId}`;
+    const baseUrl = window.location.href.replace('/home', '');
+    const url = `${baseUrl}/post/${postId}`;
     this.clipboard.copy(url);
     
     // Show popup for specific post

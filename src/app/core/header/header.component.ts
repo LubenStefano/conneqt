@@ -13,6 +13,7 @@ import { RouterLink } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   user: User | null = null;
+  isMenuOpen = false;
 
   constructor(private userService: UserService, private router: Router) {}
 
@@ -22,6 +23,10 @@ export class HeaderComponent implements OnInit {
     });
   }
 
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  
   onLogout() {
     this.userService.logout().subscribe({
       next: () => {
