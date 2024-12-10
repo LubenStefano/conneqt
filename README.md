@@ -9,7 +9,7 @@
 4. [Setup and Installation](#setup-and-installation)  
 5. [Usage](#usage)  
 6. [Database Structure](#database-structure)  
-7. [Development Workflow](#development-workflow)  
+7. [Deploy in github pages](#Deploy-in-github-pages)  
 
 
 ---
