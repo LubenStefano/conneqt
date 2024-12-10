@@ -9,7 +9,7 @@
 4. [Setup and Installation](#setup-and-installation)  
 5. [Usage](#usage)  
 6. [Database Structure](#database-structure)  
-7. [Development Workflow](#development-workflow)  
+7. [Deploy in github pages](#Deploy-in-github-pages)  
 
 
 ---
@@ -124,7 +124,16 @@ Click the "Save" button on posts to add them to your saved posts list, accessibl
 
 ---
 
-## **Development Workflow**  
+## **Deploy in github pages**  
+```
+ng build --output-path=dist --base-href="/conneqt/"
+ngh --dir=dist
+ngh --dir=dist/browser
+
+```
+
+---
+
 
 ### **Code Organization**  
 - **App Component**:  
