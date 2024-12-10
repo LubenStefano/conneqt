@@ -70,7 +70,6 @@ app-post-box {
 @media (max-width: 768px) {
     #main-flow {
         margin-right: 0;
-        margin-top: 80px; /* Adjusted margin-top for small screens */
         max-width: 500px; /* Adjusted max-width for small screens */
     }
     .margin-top {
@@ -81,7 +80,6 @@ app-post-box {
 @media (max-width: 480px) {
     #main-flow {
         margin-right: 0;
-        margin-top: 60px; /* Adjusted margin-top for very small screens */
         max-width: 100%; /* Full width for very small screens */
     }
     .margin-top {
