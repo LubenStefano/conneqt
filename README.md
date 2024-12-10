@@ -124,7 +124,16 @@ Click the "Save" button on posts to add them to your saved posts list, accessibl
 
 ---
 
-## **Development Workflow**  
+## **Deploy in github pages**  
+```
+ng build --output-path=dist --base-href="/conneqt/"
+ngh --dir=dist
+ngh --dir=dist/browser
+
+```
+
+---
+
 
 ### **Code Organization**  
 - **App Component**:  
