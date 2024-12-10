@@ -1,11 +1,140 @@
-# Conneqt
+# **Conneqt**  
 
-(This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11).It is a social media/forum platform created to connect (conneQt) friends/people. It would be given to a certain group and it may be used as a private messaging platform as well. In addition, if asked, it may be added a new verification page with a specific password so only the people who are to use it- would.
+🚀 **Live Demo**: [Conneqt - Hosted on GitHub Pages](https://lubenstefano.github.io/conneqt/home)  
 
-## Development server
+## **Table of Contents**  
+1. [Introduction](#introduction)  
+2. [Features](#features)  
+3. [Technologies Used](#technologies-used)  
+4. [Setup and Installation](#setup-and-installation)  
+5. [Usage](#usage)  
+6. [Database Structure](#database-structure)  
+7. [Development Workflow](#development-workflow)  
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Public host
+---
 
-The website is hosted publicly on `https://lubenstefano.github.io/conneqt/home`
+## **Introduction**  
+**Conneqt** is a modern, scalable social networking platform built with Angular and Firebase. Inspired by platforms like Twitter, it allows users to interact with content, save posts, and engage in a connected online environment. Conneqt emphasizes speed, responsiveness, and user-centric design, offering a seamless experience across devices.  
+
+---
+
+## **Features**  
+- **User Authentication**:  
+  Powered by Firebase Authentication, enabling secure sign-ups, logins, and profile management.  
+- **Post Saving**:  
+  Users can save posts to their profiles for quick access.  
+- **Real-Time Data**:  
+  Firebase's real-time database ensures that users receive live updates across the platform.  
+- **Image Cropper**:  
+  Integrated image cropping tool for profile picture uploads and more.  
+- **Responsive Design**:  
+  Optimized for desktop, with plans for mobile-first designs in the future.  
+- **Loaders**:  
+  Enhanced user feedback during data processing and server requests.  
+
+---
+
+## **Technologies Used**  
+- **Frontend**:  
+  - Angular (Typescript, HTML, CSS)  
+  - RxJS for reactive programming  
+- **Backend and Database**:  
+  - Firebase Authentication  
+  - Firebase Firestore/Cloud storage
+- **Hosting**:  
+  - GitHub Pages  
+
+---
+
+## **Setup and Installation**  
+
+### **Prerequisites**  
+1. Install [Node.js](https://nodejs.org/) (v14+ recommended).  
+2. Install [Angular CLI](https://angular.io/cli):  
+   ```bash  
+   npm install -g @angular/cli  
+   ```  
+
+### **Steps to Clone and Run**  
+1. Clone the repository:  
+   ```bash  
+   git clone https://github.com/your-username/conneqt.git  
+   ```  
+
+2. Navigate to the project directory:  
+   ```bash  
+   cd conneqt  
+   ```  
+
+3. Install dependencies:  
+   ```bash  
+   npm install  
+   ```  
+
+4. Run the application locally:  
+   ```bash  
+   ng serve  
+   ```  
+   The app will be available at `http://localhost:4200`.  
+
+
+---
+
+## **Usage**  
+
+### **Homepage**  
+The homepage features trending posts, a search bar, and user-specific recommendations.  
+
+### **Profile Management**  
+Authenticated users can update their profile picture using the image cropper and customize other personal details.  
+
+### **Saving Posts**  
+Click the "Save" button on posts to add them to your saved posts list, accessible via the profile page.  
+
+---
+
+## **Database Structure**  
+
+### **Users Collection**  
+```json  
+{  
+  "users": {  
+    "userId": {  
+      "username": "exampleUser",  
+      "photoUrl": "http://example.com/photo.jpg",  
+      "savedPosts": ["postId1", "postId2"]  
+    }  
+  }  
+}  
+```  
+
+### **Posts Collection**  
+```json  
+{  
+  "posts": {  
+    "postId": {  
+      "content": "This is a sample post.",  
+      "authorId": "userId",  
+      "savedBy": ["userId1", "userId2"]  
+    }  
+  }  
+}  
+```  
+
+---
+
+## **Development Workflow**  
+
+### **Code Organization**  
+- **App Component**:  
+  Root-level layout and conditional rendering based on screen size (desktop/mobile).  
+- **Services**:  
+  Shared logic for API calls, data management, and authentication.  
+
+### **Key Practices**  
+- Using Angular CLI for efficient module and component generation.  
+- Employing media queries in CSS for responsive design.  
+- Database indexing for performance optimization.  
+
+---
