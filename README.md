@@ -29,7 +29,7 @@
 - **Image Cropper**:  
   Integrated image cropping tool for profile picture uploads and more.  
 - **Responsive Design**:  
-  Optimized for desktop, with plans for mobile-first designs in the future.  
+  Optimized for desktop and mobile.  
 - **Loaders**:  
   Enhanced user feedback during data processing and server requests.  
 
