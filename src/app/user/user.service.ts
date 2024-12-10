@@ -1,9 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword, updateProfile, User, signOut, onAuthStateChanged, signInWithEmailAndPassword } from '@angular/fire/auth';
-import { arrayRemove, arrayUnion, doc, docData, DocumentReference, Firestore, getDoc, setDoc, updateDoc } from '@angular/fire/firestore';
+import {
+  Auth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+  User,
+  signOut,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+} from '@angular/fire/auth';
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  docData,
+  DocumentReference,
+  Firestore,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Observable, BehaviorSubject, from, of, throwError } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
-import { ErrorHandlerService } from '../error/error-handling.service'; 
+import { ErrorHandlerService } from '../error/error-handling.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +29,29 @@ import { ErrorHandlerService } from '../error/error-handling.service';
 export class UserService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private auth: Auth, private firestore: Firestore,private errorHandler: ErrorHandlerService) {}
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore,
+    private errorHandler: ErrorHandlerService
+  ) { }
 
-  register(userData: { email: string; username: string; password: string; img: string }): Observable<void> {
+  register(userData: {
+    email: string;
+    username: string;
+    password: string;
+    img: string;
+  }): Observable<void> {
     const { email, username, password, img } = userData;
 
-    return from(createUserWithEmailAndPassword(this.auth, email, password)).pipe(
+    return from(
+      createUserWithEmailAndPassword(this.auth, email, password)
+    ).pipe(
       switchMap((credential) => {
         const user = credential.user;
-        return updateProfile(user, { displayName: username, photoURL: img }).then(() => {
+        return updateProfile(user, {
+          displayName: username,
+          photoURL: img,
+        }).then(() => {
           const userDocRef = doc(this.firestore, `users/${user.uid}`);
           const userDocData = {
             uid: user.uid,
@@ -39,19 +71,21 @@ export class UserService {
     );
   }
 
-
-  login(email: string, password: string): Observable<{ uid: string; displayName: string }> {
+  login(
+    email: string,
+    password: string
+  ): Observable<{ uid: string; displayName: string }> {
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((credential) => {
         const user = credential.user;
         return of({
           uid: user.uid,
-          displayName: user.displayName || 'No Name', 
+          displayName: user.displayName || 'No Name',
         });
       }),
       catchError((error) => {
         console.error(error.code);
-        
+
         throw new Error(error.code);
       })
     );
@@ -66,48 +100,50 @@ export class UserService {
     );
   }
 
-
   getUser(): Observable<User | null> {
-  return new Observable((subscriber) => {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.getUserFromFirestore(user.uid).pipe(
+    return new Observable((subscriber) => {
+      onAuthStateChanged(this.auth, (user) => {
+        if (user) {
+          this.getUserFromFirestore(user.uid)
+            .pipe(
+              catchError((error) => {
+                console.error('Error fetching user from Firestore:', error);
+                return of(null);
+              })
+            )
+            .subscribe((firestoreUser) => {
+              this.currentUserSubject.next(firestoreUser);
+              subscriber.next(firestoreUser);
+            });
+        } else {
+          this.currentUserSubject.next(null);
+          subscriber.next(null);
+        }
+      });
+    });
+  }
+  getUserById(uid: string): Observable<User | null> {
+    return new Observable((subscriber) => {
+      this.getUserFromFirestore(uid)
+        .pipe(
           catchError((error) => {
-            console.error('Error fetching user from Firestore:', error);
-            return of(null); 
+            console.error('Error fetching user by ID:', error);
+            return of(null);
           })
-        ).subscribe(firestoreUser => {
-          this.currentUserSubject.next(firestoreUser); 
-          subscriber.next(firestoreUser); 
+        )
+        .subscribe((firestoreUser) => {
+          subscriber.next(firestoreUser);
+          subscriber.complete();
         });
-      } else {
-        this.currentUserSubject.next(null);
-        subscriber.next(null); 
-      }
     });
-  });
-}
-getUserById(uid: string): Observable<User | null> {
-  return new Observable((subscriber) => {
-    // Get user directly from Firestore using provided ID
-    this.getUserFromFirestore(uid).pipe(
-      catchError((error) => {
-        console.error('Error fetching user by ID:', error);
-        return of(null);
-      })
-    ).subscribe(firestoreUser => {
-      subscriber.next(firestoreUser);
-      subscriber.complete();
-    });
-  });
-}
-  
+  }
+
   private getUserFromFirestore(uid: string): Observable<User | null> {
     const userDocRef = doc(this.firestore, `users/${uid}`);
     return docData(userDocRef, { idField: 'uid' }).pipe(
       catchError((error) => {
         console.error('Error fetching user from Firestore:', error);
-        return of(null); 
+        return of(null);
       })
     );
   }
@@ -116,7 +152,7 @@ getUserById(uid: string): Observable<User | null> {
     return docData(userRef, { idField: 'uid' }).pipe(
       catchError((error) => {
         console.error('Error fetching user by reference:', error);
-        return of(null); // Return null on error
+        return of(null);
       })
     );
   }
@@ -133,21 +169,25 @@ getUserById(uid: string): Observable<User | null> {
 
   unsavePost(userId: string, postId: string): Observable<void> {
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    return from(updateDoc(userDocRef, { savedPosts: arrayRemove(postId) })).pipe(
+    return from(
+      updateDoc(userDocRef, { savedPosts: arrayRemove(postId) })
+    ).pipe(
       catchError((error) => {
         console.error('Error unsaving post:', error);
         throw new Error('Failed to unsave post');
       })
     );
   }
-  updateProfile(userId: string, updates: { displayName?: string; photoURL?: string }): Observable<void> {
+  updateProfile(
+    userId: string,
+    updates: { displayName?: string; photoURL?: string }
+  ): Observable<void> {
     const userRef = doc(this.firestore, `users/${userId}`);
     return from(updateDoc(userRef, updates)).pipe(
-      catchError(error => {
+      catchError((error) => {
         console.error('Error updating profile:', error);
         return throwError(() => new Error('Failed to update profile'));
       })
     );
   }
 }
-

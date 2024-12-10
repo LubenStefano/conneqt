@@ -7,7 +7,7 @@ import { UserService } from '../../user/user.service';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
 import { FormsModule, NgForm } from '@angular/forms';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { switchMap, map } from 'rxjs';
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
 
@@ -104,25 +104,20 @@ export class EditPostComponent implements OnInit {
   }
 
   onFileSelected(event: Event): void {
-    console.log('File selected event received');
     this.selectedFileEvent = event;
     this.showCropper = true;
   }
 
   onImageCropped(croppedImage: string): void {
-    console.log('Received cropped image');
     this.selectedImage = croppedImage;
-    console.log('Image processed and stored');
     this.photo = croppedImage;
   }
 
   onCropSaved(): void {
-    console.log('Crop saved, hiding cropper');
     this.showCropper = false;
   }
 
   onCropCancelled(): void {
-    console.log('Crop cancelled, resetting state');
     this.selectedFileEvent = null;
     this.selectedImage = null;
     this.showCropper = false;
@@ -133,12 +128,10 @@ export class EditPostComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    // Handle image update
     const imageToUpdate =
       this.selectedImage !== null ? this.selectedImage : this.photo;
 
     if (imageToUpdate?.startsWith('data:image')) {
-      // New image needs to be uploaded
       this.postService
         .uploadImageToFirebase(imageToUpdate)
         .pipe(
@@ -160,7 +153,6 @@ export class EditPostComponent implements OnInit {
           },
         });
     } else {
-      // No new image or keeping existing image URL
       this.postService
         .updatePost(
           this.post._id,
@@ -179,7 +171,6 @@ export class EditPostComponent implements OnInit {
     }
   }
 
-  // Add method to remove image
   removeImage() {
     this.photo = null;
     this.selectedImage = null;

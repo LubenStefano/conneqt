@@ -1,59 +1,58 @@
-main{
-    height: 90vh;
-    align-items: center;
-    display: flex;
-    justify-content: center;
+main {
+  height: 90vh;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 .error-page {
-    text-align: center;
-    font-family: 'Pacifico';
-    color: #363540;
-    margin-top: 50px;
-  }
-  
-  .logo {
-    font-size: 150px;
-    position: relative;
-    display: inline-block;
-  }
-  
-  .error-code {
-    font-size: 50px;
-    color: #ff9e5e;
-    position: absolute;
-    top: -20px;
-    right: -50px;
-    rotate: 20deg;
-  }
-  
-  .message {
-    font-family: cursive;
-    color: #363540;
-    font-size: 1.2rem;
-    margin: 10px 0 30px;
-  }
-  
-  .error-image {
-    width: 200px;
-    height: 200px;
-    margin: 20px 0;
-    background-color: #ff9e5e;
-    display: block;
-    border-radius: 50%;
-  }
-  
-  .home-button {
-    background-color: #ff9e5e;
-    color: #363540;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-  }
-  
-  .home-button:hover {
-    background-color: #e8924d;
-  }
-  
+  text-align: center;
+  font-family: "Pacifico";
+  color: #363540;
+  margin-top: 50px;
+}
+
+.logo {
+  font-size: 150px;
+  position: relative;
+  display: inline-block;
+}
+
+.error-code {
+  font-size: 50px;
+  color: #ff9e5e;
+  position: absolute;
+  top: -20px;
+  right: -50px;
+  rotate: 20deg;
+}
+
+.message {
+  font-family: cursive;
+  color: #363540;
+  font-size: 1.2rem;
+  margin: 10px 0 30px;
+}
+
+.error-image {
+  width: 200px;
+  height: 200px;
+  margin: 20px 0;
+  background-color: #ff9e5e;
+  display: block;
+  border-radius: 50%;
+}
+
+.home-button {
+  background-color: #ff9e5e;
+  color: #363540;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+}
+
+.home-button:hover {
+  background-color: #e8924d;
+}

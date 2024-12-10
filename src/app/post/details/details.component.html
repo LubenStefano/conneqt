@@ -1,6 +1,6 @@
 <main>
   @if(post) {
-    <app-post-box
+  <app-post-box
     id="details-post"
     [post]="post"
     [user]="user"
@@ -18,8 +18,8 @@
     (toggleOptionsMenu)="toggleOptionsMenu($event.postId, $event.event)"
     (closeOptionsMenu)="closeOptionsMenu()"
     (deletePost)="deletePost($event)"
-></app-post-box>
-  <hr/>
+  ></app-post-box>
+  <hr />
   @if(isAuthenticated){
   <div class="comment-form">
     <app-user-badge
@@ -49,8 +49,7 @@
       </div>
     </form>
   </div>
-  }
-  @if(comments){
+  } @if(comments){
   <div class="comments">
     @for (comment of comments; track comment._id) {
     <div class="comment">

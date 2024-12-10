@@ -1,13 +1,12 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
-
 
 @Component({
   selector: 'app-user-badge',
   standalone: true,
   imports: [],
   templateUrl: './user-badge.component.html',
-  styleUrls: ['./user-badge.component.css']
+  styleUrls: ['./user-badge.component.css'],
 })
 export class UserBadgeComponent {
   @Input() username: string = '';
@@ -16,7 +15,7 @@ export class UserBadgeComponent {
 
   constructor(private router: Router) {}
 
-  goToProfile(){
+  goToProfile() {
     this.router.navigate(['/profile', this.uid]);
   }
 }

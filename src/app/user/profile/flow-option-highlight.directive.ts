@@ -10,19 +10,21 @@ export class FlowHighlightDirective implements OnInit {
   constructor(private el: ElementRef, private renderer: Renderer2) {}
 
   ngOnInit(): void {
-    this.updateStyles(); // Initial style application
+    this.updateStyles();
   }
 
   ngOnChanges(): void {
-    this.updateStyles(); // Handle updates to the `isActive` property
+    this.updateStyles();
   }
 
   private updateStyles(): void {
     if (this.isActive) {
-      // Apply gray background for active flow
-      this.renderer.setStyle(this.el.nativeElement, 'background-color', '#e3e3e3');
+      this.renderer.setStyle(
+        this.el.nativeElement,
+        'background-color',
+        '#e3e3e3'
+      );
     } else {
-      // Reset background for inactive flow
       this.renderer.removeStyle(this.el.nativeElement, 'background-color');
     }
   }

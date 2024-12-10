@@ -9,7 +9,7 @@ export const profileGuard: CanActivateFn = (route, state) => {
   const userId = route.paramMap.get('id'); // Assuming the route has a parameter 'id' for user ID
 
   return userService.getUser().pipe(
-    map(user => {
+    map((user) => {
       if (user && user.uid === userId) {
         return true;
       } else {

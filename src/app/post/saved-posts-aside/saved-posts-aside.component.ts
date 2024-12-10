@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faXmarkCircle } from '@fortawesome/free-regular-svg-icons';
 import { faBookmark } from '@fortawesome/free-solid-svg-icons';

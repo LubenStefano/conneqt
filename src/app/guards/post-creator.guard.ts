@@ -5,7 +5,10 @@ import { PostService } from '../post/post.service';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-export const postCreatorGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) => {
+export const postCreatorGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state
+) => {
   const userService = inject(UserService);
   const postService = inject(PostService);
   const router = inject(Router);
@@ -18,14 +21,14 @@ export const postCreatorGuard: CanActivateFn = (route: ActivatedRouteSnapshot, s
   }
 
   return userService.getUser().pipe(
-    switchMap(user => {
+    switchMap((user) => {
       if (!user) {
         router.navigate(['/login']);
         return of(false);
       }
 
       return postService.getPostById(postId).pipe(
-        map(post => {
+        map((post) => {
           if (post.uid === user.uid) {
             return true;
           } else {

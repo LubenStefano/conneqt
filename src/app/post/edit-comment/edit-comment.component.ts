@@ -5,7 +5,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
 import { UserService } from '../../user/user.service';
 import { Comment } from '../../types/comment';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { switchMap, tap } from 'rxjs';
 import { User } from '../../types/user';
 

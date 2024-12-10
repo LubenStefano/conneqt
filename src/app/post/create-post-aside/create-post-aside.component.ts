@@ -1,19 +1,18 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faImage,
   faArrowAltCircleRight,
   faPlusSquare,
-  faTimesCircle
+  faTimesCircle,
 } from '@fortawesome/free-regular-svg-icons';
 import { UserService } from '../../user/user.service';
 import { FormsModule, NgForm } from '@angular/forms';
 import { PostService } from '../post.service';
 import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
 import { ErrorHandlerService } from '../../error/error-handling.service';
-
 
 @Component({
   selector: 'app-create-post-aside',
@@ -64,32 +63,25 @@ export class CreatePostAsideComponent implements OnInit {
   }
 
   onFileSelected(event: Event): void {
-    console.log('File selected event received');
     this.selectedFileEvent = event;
     this.showCropper = true;
   }
 
   onImageCropped(croppedImage: string): void {
-    console.log('Received cropped image');
     this.selectedImage = croppedImage;
-    console.log('Image processed and stored');
   }
 
   onCropSaved(): void {
-    console.log('Crop saved, hiding cropper');
     this.showCropper = false;
   }
 
   onCropCancelled(): void {
-    console.log('Crop cancelled, resetting state');
     this.selectedFileEvent = null;
     this.selectedImage = null;
     this.showCropper = false;
   }
 
   createPost(form: NgForm): void {
-    console.log('Creating post...');
-
     if (!form.valid || !this.userId) {
       this.errorHandler.showError('Content is required!');
       return;
@@ -98,10 +90,8 @@ export class CreatePostAsideComponent implements OnInit {
     const postContent = form.value.postContent;
 
     if (this.selectedImage) {
-      console.log('Uploading image before creating post...');
       this.postService.uploadImageToFirebase(this.selectedImage).subscribe({
         next: (imageUrl) => {
-          console.log('Image uploaded successfully:', imageUrl);
           this.submitPost(postContent, imageUrl);
         },
         error: (err) => {
@@ -110,7 +100,6 @@ export class CreatePostAsideComponent implements OnInit {
         },
       });
     } else {
-      console.log('Creating post without image');
       this.submitPost(postContent);
     }
 
@@ -120,11 +109,8 @@ export class CreatePostAsideComponent implements OnInit {
   }
 
   private submitPost(content: string, imgUrl?: string) {
-    console.log('Submitting post:', { content, imgUrl });
-
     this.postService.createPost(content, this.userId, imgUrl).subscribe({
       next: (createdPost) => {
-        console.log('Post created successfully:', createdPost);
         this.errorMessage = '';
         this.showCropper = false;
         this.selectedImage = null;

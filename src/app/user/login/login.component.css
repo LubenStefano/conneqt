@@ -133,53 +133,52 @@
   margin-top: 10px;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 1200px) {
   .login-box {
-      width: 35%;
+    width: 35%;
   }
 }
 
 @media (max-width: 992px) {
   .login-box {
-      width: 50%;
+    width: 50%;
   }
 }
 
 @media (max-width: 768px) {
   .login-box {
-      width: 70%;
+    width: 70%;
   }
 
   .login-header h1 {
-      font-size: 30px;
+    font-size: 30px;
   }
 
   .login-header fa-icon {
-      font-size: 40px;
+    font-size: 40px;
   }
 
   #login-button {
-      padding: 10px 30px;
-      font-size: 18px;
+    padding: 10px 30px;
+    font-size: 18px;
   }
 }
 
 @media (max-width: 576px) {
   .login-box {
-      width: 90%;
+    width: 90%;
   }
 
   .login-header h1 {
-      font-size: 25px;
+    font-size: 25px;
   }
 
   .login-header fa-icon {
-      font-size: 30px;
+    font-size: 30px;
   }
 
   #login-button {
-      padding: 10px 20px;
-      font-size: 16px;
+    padding: 10px 20px;
+    font-size: 16px;
   }
 }

@@ -8,7 +8,7 @@ export const notAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   return userService.getUser().pipe(
-    map(user => {
+    map((user) => {
       if (user) {
         router.navigate(['/home']);
         return false;

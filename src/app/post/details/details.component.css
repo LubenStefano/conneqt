@@ -1,4 +1,3 @@
-/* Main Layout */
 main {
   display: flex;
   flex: 1;
@@ -6,12 +5,12 @@ main {
   height: fit-content;
   align-items: center;
   flex-direction: column;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   color: #363540;
   margin-top: 100px;
 }
 
-/* Comment Form */
 .comment-form {
   display: flex;
   flex-direction: column;
@@ -44,10 +43,10 @@ main {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
-#details-post{
+#details-post {
   width: 500px;
 }
-/* Comment Buttons */
+
 .comment-buttons {
   display: flex;
   justify-content: space-around;
@@ -77,7 +76,6 @@ hr {
   border: 1px solid #e3e3e3;
 }
 
-/* Comments Section */
 .comments {
   display: flex;
   flex-direction: column;
@@ -99,7 +97,6 @@ hr {
   margin: 5px 0;
 }
 
-/* Tooltip */
 .comment-tooltip {
   position: absolute;
   background: #333;
@@ -114,7 +111,6 @@ hr {
   animation: fadeIn 0.2s ease-in-out;
 }
 
-/* Comment Header and Options Menu */
 .comment-header {
   display: flex;
   justify-content: space-between;
@@ -122,7 +118,7 @@ hr {
   position: relative;
 }
 .comment-icon.active {
-  color: #4CAF50;
+  color: #4caf50;
   transition: color 0.2s ease;
 }
 
@@ -185,13 +181,12 @@ hr {
   color: #666;
 }
 
-/* Responsive Design */
 @media (max-width: 1200px) {
   .comment-form,
   .comments {
     width: 400px;
   }
-  #details-post{
+  #details-post {
     width: 400px;
   }
   hr {
@@ -204,7 +199,7 @@ hr {
     overflow: hidden;
   }
 }
-/* Adjustments for Tablets */
+
 @media (max-width: 768px) {
   .comment-form,
   .comments {
@@ -222,7 +217,6 @@ hr {
   }
 }
 
-/* Adjustments for Phones */
 @media (max-width: 480px) {
   .comment-form,
   .comments {
@@ -232,8 +226,8 @@ hr {
   hr {
     width: 95%;
   }
-  #details-post{
-    width:350px;
+  #details-post {
+    width: 350px;
   }
   .comment-form textarea {
     font-size: 12px;

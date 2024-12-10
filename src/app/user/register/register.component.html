@@ -8,8 +8,6 @@
       <div class="register-form">
         <form #form="ngForm" (ngSubmit)="register(form)">
           <div class="input-box">
-
-            
             <label for="username">Username</label>
             <input
               type="text"
@@ -21,7 +19,6 @@
               #username="ngModel"
             />
 
-           
             <label for="email">Email</label>
             <input
               type="email"
@@ -34,7 +31,6 @@
               #email="ngModel"
             />
 
-           
             <label for="password">Password</label>
             <input
               type="password"
@@ -46,7 +42,6 @@
               #password="ngModel"
             />
 
-           
             <label for="rePassword">Confirm Password</label>
             <input
               type="password"
@@ -58,17 +53,14 @@
               #rePassword="ngModel"
             />
 
-            
             <p id="login-call">
               <i>Already have an account?</i>
               <span><a routerLink="/login">Login now</a></span>
             </p>
 
-            <!-- Submit Button -->
             <button type="submit" id="register-button">Register</button>
           </div>
         </form>
-        
       </div>
     </div>
   </section>

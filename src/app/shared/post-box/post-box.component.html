@@ -62,9 +62,9 @@
           routerLink="/post/{{ post?._id }}"
         ></fa-icon>
       </div>
-        @if(showCopyPopup && copiedPostId === post?._id){
-        <div class="copy-popup">Copied to clipboard!</div>
-        }
+      @if(showCopyPopup && copiedPostId === post?._id){
+      <div class="copy-popup">Copied to clipboard!</div>
+      }
       <fa-icon
         [icon]="faShare"
         class="share-icon icon-interactive"

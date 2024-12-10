@@ -1,189 +1,188 @@
 #register {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
 }
 
 .register-header {
-    position: relative;
-    bottom: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: relative;
+  bottom: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .register-header h1 {
-    font-size: 40px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    color: #363540;
+  font-size: 40px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  color: #363540;
 }
 
 .register-header fa-icon {
-    padding: 20px 25px 20px 25px;
-    margin-bottom: 30px;
-    border-radius: 50%;
-    border: #363540 3px solid;
-    font-size: 50px;
-    background-color: white;
-    color: #363540;
+  padding: 20px 25px 20px 25px;
+  margin-bottom: 30px;
+  border-radius: 50%;
+  border: #363540 3px solid;
+  font-size: 50px;
+  background-color: white;
+  color: #363540;
 }
 
 .register-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: #363540 3px solid;
-    border-radius: 15px;
-    margin-top: 150px;
-    width: 25%;
-    transition: 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: #363540 3px solid;
+  border-radius: 15px;
+  margin-top: 150px;
+  width: 25%;
+  transition: 0.2s ease-in-out;
 }
 
 .register-box:focus-within {
-    box-shadow: 10px 10px 15px rgba(101, 99, 117, 0.952);
+  box-shadow: 10px 10px 15px rgba(101, 99, 117, 0.952);
 }
 
 .input-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 40px;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  width: 100%;
 }
 
 .input-box label {
-    font-size: 20px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    margin: 10px 0;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  margin: 10px 0;
 }
 
 .input-box input {
-    width: 100%;
-    margin: 0 10px 10px 10px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #363540;
-    outline: none;
+  width: 100%;
+  margin: 0 10px 10px 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #363540;
+  outline: none;
 }
 
 .input-box input:focus {
-    border: 2px solid #363540;
+  border: 2px solid #363540;
 }
 
 .input-box fa-icon {
-    font-size: 25px;
+  font-size: 25px;
 }
 
 .register-buttons button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-    width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
 }
 
 #login-call {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 #login-call a {
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    color: #363540;
-    text-decoration: none;
-    margin-left: 10px;
-    transition: 0.1s ease-in-out;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  color: #363540;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: 0.1s ease-in-out;
 }
 
 #register-call a:hover {
-    color: #9a9a9a;
+  color: #9a9a9a;
 }
 
 #register-button {
-    background-color: #363540;
-    color: white;
-    border: none;
-    padding: 10px 50px;
-    margin-top: 5px;
-    border-radius: 5px;
-    font-size: 20px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    cursor: pointer;
-    transition: 0.2s ease-in-out;
+  background-color: #363540;
+  color: white;
+  border: none;
+  padding: 10px 50px;
+  margin-top: 5px;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
 }
 
 #register-button:hover {
-    background-color: #b5b5b5;
-    color: #363540;
+  background-color: #b5b5b5;
+  color: #363540;
 }
 
 .error-message {
-    color: red;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: "Offside", sans-serif;
-    margin-top: 10px;
+  color: red;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: "Offside", sans-serif;
+  margin-top: 10px;
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 1300px) {
-    .register-box {
-        width: 35%;
-    }
+  .register-box {
+    width: 35%;
+  }
 }
 
 @media (max-width: 992px) {
-    .register-box {
-        width: 50%;
-    }
+  .register-box {
+    width: 50%;
+  }
 }
 
 @media (max-width: 768px) {
-    .register-box {
-        width: 70%;
-    }
+  .register-box {
+    width: 70%;
+  }
 
-    .register-header h1 {
-        font-size: 30px;
-    }
+  .register-header h1 {
+    font-size: 30px;
+  }
 
-    .register-header fa-icon {
-        font-size: 40px;
-    }
+  .register-header fa-icon {
+    font-size: 40px;
+  }
 
-    #register-button {
-        padding: 10px 30px;
-        font-size: 18px;
-    }
+  #register-button {
+    padding: 10px 30px;
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 576px) {
-    .register{
-        height: fit-content;
-    }
-    .register-box {
-        width: 90%;
-        margin-top: 250px;
-    }
+  .register {
+    height: fit-content;
+  }
+  .register-box {
+    width: 90%;
+    margin-top: 250px;
+  }
 
-    .register-header h1 {
-        font-size: 25px;
-    }
+  .register-header h1 {
+    font-size: 25px;
+  }
 
-    .register-header fa-icon {
-        font-size: 30px;
-    }
+  .register-header fa-icon {
+    font-size: 30px;
+  }
 
-    #register-button {
-        padding: 10px 20px;
-        font-size: 16px;
-    }
+  #register-button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
 }

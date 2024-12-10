@@ -6,9 +6,9 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-error',
   standalone: true,
-  imports: [CommonModule, MatSnackBarModule], // Import necessary modules
+  imports: [CommonModule, MatSnackBarModule],
   templateUrl: './error.component.html',
-  styleUrls: ['./error.component.css'] // Corrected from styleUrl to styleUrls
+  styleUrls: ['./error.component.css']
 })
 export class ErrorComponent {
   constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any) {}

@@ -8,7 +8,7 @@ import { User } from '@angular/fire/auth';
   standalone: true,
   imports: [RouterLink],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
   user: User | null = null;
@@ -26,17 +26,12 @@ export class HeaderComponent implements OnInit {
       this.user = user;
     });
 
-    // Close menu on route change
     this.router.events.subscribe(() => {
       this.closeMenu();
     });
 
-    // Close menu on clicking outside
     this.renderer.listen('window', 'click', (event: Event) => {
-      if (
-        this.isMenuOpen && 
-        !this.elRef.nativeElement.contains(event.target)
-      ) {
+      if (this.isMenuOpen && !this.elRef.nativeElement.contains(event.target)) {
         this.closeMenu();
       }
     });
@@ -53,12 +48,12 @@ export class HeaderComponent implements OnInit {
   onLogout() {
     this.userService.logout().subscribe({
       next: () => {
-        this.user = null; 
-        this.router.navigate(['/login']); 
+        this.user = null;
+        this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error('Error logging out:', err); 
-      }
+        console.error('Error logging out:', err);
+      },
     });
   }
 

@@ -12,45 +12,47 @@ import { ErrorHandlerService } from '../../error/error-handling.service';
   standalone: true,
   imports: [RouterLink, FormsModule, FontAwesomeModule],
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'], // Fixed typo: styleUrl -> styleUrls
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
   constructor(
     private userService: UserService,
-     private router: Router,
-     private errorHandler: ErrorHandlerService
-    ) {}
+    private router: Router,
+    private errorHandler: ErrorHandlerService
+  ) {}
   faUser = faUser;
-  regExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{1,}$');
+  regExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{1,}$');
 
-  register(form:NgForm){
-    if(!form.valid){
-      if(form.value.username === ''){
-       this.errorHandler.showError('Username is required');
+  register(form: NgForm) {
+    if (!form.valid) {
+      if (form.value.username === '') {
+        this.errorHandler.showError('Username is required');
         return;
       }
-      if(form.value.email === ''){
+      if (form.value.email === '') {
         this.errorHandler.showError('Email is required');
         return;
       }
-      if(!form.value.email.match(this.regExp)){
+      if (!form.value.email.match(this.regExp)) {
         this.errorHandler.showError('Email is invalid');
         return;
       }
-      if(form.value.password === ''){
+      if (form.value.password === '') {
         this.errorHandler.showError('Password is required');
         return;
       }
-      if(form.value.password.length < 6){
-        this.errorHandler.showError('Password must be at least 6 characters long');
+      if (form.value.password.length < 6) {
+        this.errorHandler.showError(
+          'Password must be at least 6 characters long'
+        );
         return;
       }
-      if(form.value.rePassword === ''){
+      if (form.value.rePassword === '') {
         this.errorHandler.showError('Please re-enter your password');
       }
       return;
     }
-    if(form.value.password !== form.value.rePassword){
+    if (form.value.password !== form.value.rePassword) {
       this.errorHandler.showError('Passwords do not match');
       return;
     }
@@ -59,11 +61,9 @@ export class RegisterComponent {
       email: form.value.email,
       password: form.value.password,
       img: DEFAULT_USER_IMG,
-      id: '', // Will be assigned by the backend or Firebase
+      id: '',
       savedPosts: [],
     };
-
-    console.log(user);
 
     this.userService.register(user).subscribe({
       next: () => {
@@ -74,7 +74,8 @@ export class RegisterComponent {
         if (err.code) {
           switch (err.code) {
             case 'auth/email-already-in-use':
-              errorMessage = 'The email address is already in use by another account.';
+              errorMessage =
+                'The email address is already in use by another account.';
               break;
             case 'auth/invalid-email':
               errorMessage = 'The email address is not valid.';
@@ -91,8 +92,7 @@ export class RegisterComponent {
           }
         }
         this.errorHandler.showError(errorMessage);
-      }
+      },
     });
   }
-
 }

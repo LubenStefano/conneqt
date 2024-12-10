@@ -35,17 +35,17 @@
             </fa-icon>
           </div>
           <div routerLink="/post/{{ savedPost._id }}">
-          <div class="post-content">
-            @if(savedPost.img) {
-            <img [src]="savedPost.img" alt="Post Image" />
-            }
-            <div class="post-text-content">
-              {{ savedPost.content }}
+            <div class="post-content">
+              @if(savedPost.img) {
+              <img [src]="savedPost.img" alt="Post Image" />
+              }
+              <div class="post-text-content">
+                {{ savedPost.content }}
+              </div>
             </div>
-          </div>
-          <div class="post-time">
-            <span>{{ savedPost.date }}</span>
-          </div>
+            <div class="post-time">
+              <span>{{ savedPost.date }}</span>
+            </div>
           </div>
         </div>
         } }

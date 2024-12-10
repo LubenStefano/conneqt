@@ -8,17 +8,12 @@ import { Router } from '@angular/router';
 import { ImageCropperComponent } from '../../post/image-cropper/image-cropper.component';
 import { User } from '../../types/user';
 
-
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [
-    FormsModule,
-    FontAwesomeModule,
-    ImageCropperComponent,
-  ],
+  imports: [FormsModule, FontAwesomeModule, ImageCropperComponent],
   templateUrl: './edit-profile.component.html',
-  styleUrl: './edit-profile.component.css'
+  styleUrl: './edit-profile.component.css',
 })
 export class EditProfileComponent implements OnInit {
   user: User | null = null;
@@ -30,13 +25,10 @@ export class EditProfileComponent implements OnInit {
   showCropper = false;
   selectedFileEvent: Event | null = null;
 
-  constructor(
-    private userService: UserService,
-    private router: Router
-  ) {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit() {
-    this.userService.getUser().subscribe(user => {
+    this.userService.getUser().subscribe((user) => {
       if (user) {
         this.user = {
           uid: user.uid,
@@ -45,7 +37,7 @@ export class EditProfileComponent implements OnInit {
           savedPosts: [],
           displayName: user.displayName || undefined,
           photoURL: user.photoURL || undefined,
-          email: user.email || undefined
+          email: user.email || undefined,
         };
         this.username = this.user.username;
       } else {
@@ -94,7 +86,7 @@ export class EditProfileComponent implements OnInit {
       error: (error) => {
         console.error('Error updating profile:', error);
         this.isSubmitting = false;
-      }
+      },
     });
   }
 

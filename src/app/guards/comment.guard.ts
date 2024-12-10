@@ -5,7 +5,10 @@ import { PostService } from '../post/post.service';
 import { map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-export const commentCreatorGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) => {
+export const commentCreatorGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state
+) => {
   const userService = inject(UserService);
   const postService = inject(PostService);
   const router = inject(Router);
@@ -19,7 +22,7 @@ export const commentCreatorGuard: CanActivateFn = (route: ActivatedRouteSnapshot
   }
 
   return userService.getUser().pipe(
-    switchMap(user => {
+    switchMap((user) => {
       if (!user) {
         router.navigate(['/login']);
         return of(false);
@@ -28,8 +31,8 @@ export const commentCreatorGuard: CanActivateFn = (route: ActivatedRouteSnapshot
       const userUid = user.uid;
 
       return postService.getComments(postId).pipe(
-        map(comments => {
-          const comment = comments.find(c => c._id === commentId);
+        map((comments) => {
+          const comment = comments.find((c) => c._id === commentId);
           if (comment?.uid === userUid) {
             return true;
           } else {

@@ -1,164 +1,157 @@
-/* Create Post Section */
 #create-post {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: fixed;
-    top: 30%;
-    left: 0;
-    padding-left: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: fixed;
+  top: 30%;
+  left: 0;
+  padding-left: 50px;
+  width: 400px;
+  background-color: #fff;
+  border-radius: 10px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.cp-header {
+  display: flex;
+  align-items: center;
+}
+
+.cp-header h3 {
+  font-size: 20px;
+  padding: 10px;
+}
+
+#cp-user {
+  margin: 20px 0;
+}
+
+.cp-form textarea {
+  width: 100%;
+  height: 60px;
+  padding: 17px 20px;
+  box-sizing: border-box;
+  border: none;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  color: #363540;
+  border-radius: 25px;
+  background-color: #e3e3e3;
+  font-size: 16px;
+  resize: none;
+}
+
+.cp-form textarea:focus {
+  outline: none;
+}
+
+.cp-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+}
+
+.cp-buttons button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.cp-buttons button:hover {
+  transform: scale(1.1);
+}
+
+.image-icon-selected {
+  color: green;
+}
+.cp-body{
+  width: 90%;
+}
+
+@media (max-width: 1350px) {
+  #create-post {
     width: 400px;
-    background-color: #fff; /* Added for better visibility */
-    border-radius: 10px;
-    z-index: 1000; /* Ensures it stays above other elements */
-    transition: all 0.3s ease;
+    padding-left: 60px;
   }
-  
-  /* Header */
-  .cp-header {
-    display: flex;
-    align-items: center;
-  }
-  
+
   .cp-header h3 {
-    font-size: 20px;
-    padding: 10px;
+    font-size: 22px;
   }
-  
-  /* User Info */
-  #cp-user {
-    margin: 20px 0;
-  }
-  
-  /* Text Area */
+
   .cp-form textarea {
-    width: 100%;
-    height: 60px;
-    padding: 17px 20px;
-    box-sizing: border-box;
-    border: none;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #363540;
-    border-radius: 25px;
-    background-color: #e3e3e3;
-    font-size: 16px;
-    resize: none;
+    font-size: 18px;
   }
-  
-  .cp-form textarea:focus {
-    outline: none;
-  }
-  
-  /* Buttons */
-  .cp-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin: 10px 0;
-  }
-  
-  .cp-buttons button {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-  
-  .cp-buttons button:hover {
-    transform: scale(1.1);
-  }
-  
-  /* Selected Image Icon */
-  .image-icon-selected {
-    color: green; /* Color when an image is selected */
-  }
-  
-  /* Responsive Design */
-  
-  /* For medium screens (tablets) */
-  @media (max-width: 1250px) {
-    #create-post {
-        width: 400px;
-        padding-left: 60px;
-    }
-
-    .cp-header h3 {
-        font-size: 22px;
-    }
-
-    .cp-form textarea {
-        font-size: 18px;
-    }
 }
 @media (max-width: 1250px) {
-    #create-post {
-        width: 300px;
-        padding-left: 60px;
-    }
+  #create-post {
+    width: 300px;
+    padding-left: 60px;
+  }
 
-    .cp-header h3 {
-        font-size: 22px;
-    }
+  .cp-header h3 {
+    font-size: 22px;
+  }
 
-    .cp-form textarea {
-        font-size: 18px;
-    }
+  .cp-form textarea {
+    font-size: 18px;
+  }
 }
-/* For medium screens (tablets) */
+
 @media (max-width: 900px) {
-    #create-post {
-        position: absolute;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        width: 60%;
-        padding: 20px;
-        align-items: center;
-        z-index: 1;
-    }
+  #create-post {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 400px;
+    padding: 20px;
+    align-items: center;
+    z-index: 1;
+  }
 
-    .cp-header h3 {
-        font-size: 18px;
-    }
+  .cp-header h3 {
+    font-size: 18px;
+  }
 
-    .cp-form textarea {
-        font-size: 14px;
-    }
+  .cp-form textarea {
+    font-size: 14px;
+  }
 }
 
-/* For small screens (phones) */
 @media (max-width: 480px) {
-    #create-post {
-        position: absolute;
-        left: 50%;
-        top: 0;
-        transform: translateX(-50%);
-        width: 90%;
-        padding: 20px;
-        align-items: center;
-        z-index: 1;
-    }
+  #create-post {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    width: 90%;
+    padding: 20px;
+    align-items: center;
+    z-index: 1;
+  }
 
-    .cp-header h3 {
-        font-size: 18px;
-    }
+  .cp-header h3 {
+    font-size: 18px;
+  }
 
-    .cp-form textarea {
-        font-size: 14px;
-    }
+  .cp-form textarea {
+    font-size: 14px;
+  }
 }
 
-/* For extra small screens */
 @media (max-width: 320px) {
-    #create-post {
-        width: 100%;
-        padding: 10px;
-    }
+  #create-post {
+    width: 100%;
+    padding: 10px;
+  }
 
-    .cp-header h3 {
-        font-size: 16px;
-    }
+  .cp-header h3 {
+    font-size: 16px;
+  }
 
-    .cp-form textarea {
-        font-size: 12px;
-    }
+  .cp-form textarea {
+    font-size: 12px;
+  }
 }

@@ -18,8 +18,7 @@ import { NgClass } from '@angular/common';
   styleUrls: ['./post-flow.component.css'],
 })
 export class PostFlowComponent implements OnInit {
-
-  likeBubbles: {[key: string]: boolean} = {};
+  likeBubbles: { [key: string]: boolean } = {};
 
   posts: (Post & User)[] = [];
   user: User | null = null;
@@ -36,16 +35,14 @@ export class PostFlowComponent implements OnInit {
     private clipboard: Clipboard
   ) {}
 
-  // ... existing properties ...
   isAuthenticated = false;
 
   ngOnInit() {
-    // Split streams for user and posts
     const posts$ = this.postService.getPosts().pipe(
-      switchMap(posts => {
-        const postsWithUserInfo$ = posts.map(post =>
+      switchMap((posts) => {
+        const postsWithUserInfo$ = posts.map((post) =>
           this.userService.getUserByReference(post.creator).pipe(
-            map(creator => ({
+            map((creator) => ({
               ...post,
               uid: creator?.uid || 'unknown',
               username: creator?.displayName || 'Unknown User',
@@ -59,18 +56,19 @@ export class PostFlowComponent implements OnInit {
     );
 
     const user$ = this.userService.getUser().pipe(
-      tap(user => {
+      tap((user) => {
         this.isAuthenticated = !!user;
         if (user) {
-          // Cast the Firebase user to our custom User interface with proper type checking
           const customUser: User = {
             uid: user.uid,
             username: user.displayName || 'Unknown User',
             userPfp: user.photoURL || '',
-            savedPosts: Array.isArray((user as any).savedPosts) ? (user as any).savedPosts : [],
+            savedPosts: Array.isArray((user as any).savedPosts)
+              ? (user as any).savedPosts
+              : [],
             displayName: user.displayName || undefined,
             photoURL: user.photoURL || undefined,
-            email: user.email || undefined
+            email: user.email || undefined,
           };
           this.user = customUser;
         } else {
@@ -78,8 +76,7 @@ export class PostFlowComponent implements OnInit {
         }
       })
     );
-    
-    // Combine streams
+
     combineLatest([posts$, user$]).subscribe({
       next: ([posts, _]) => {
         this.posts = posts;
@@ -87,28 +84,23 @@ export class PostFlowComponent implements OnInit {
       error: (error) => {
         console.error('Error loading data:', error);
         this.posts = [];
-      }
-    });  
-    setTimeout(() => {
-      console.log(this.posts);
-    }, 2000);
-      
+      },
+    });
   }
 
   likePost(id: string) {
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to like posts');
       return;
     }
-  
+
     const post = this.posts.find((p) => p._id === id);
     if (!post) return;
-  
+
     this.prevLikedState = this.isLiked(post);
     if (!this.prevLikedState) {
       this.likeBubbles[id] = true;
     }
-  
+
     this.postService.likePost(id, this.user.uid).subscribe({
       next: () => {
         if (this.prevLikedState) {
@@ -121,13 +113,12 @@ export class PostFlowComponent implements OnInit {
           }, 800);
         }
       },
-      error: (error) => console.error('Error liking post:', error)
+      error: (error) => console.error('Error liking post:', error),
     });
   }
 
   savePost(postId: string) {
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to save posts');
       return;
     }
 
@@ -142,14 +133,16 @@ export class PostFlowComponent implements OnInit {
       next: () => {
         if (this.user) {
           if (isSaved) {
-            this.user.savedPosts = this.user.savedPosts.filter(id => id !== postId);
+            this.user.savedPosts = this.user.savedPosts.filter(
+              (id) => id !== postId
+            );
           } else {
             this.user.savedPosts = [...(this.user.savedPosts || []), postId];
           }
-          this.posts = [...this.posts]; // Force change detection
+          this.posts = [...this.posts];
         }
       },
-      error: (error) => console.error('Error saving/unsaving post:', error)
+      error: (error) => console.error('Error saving/unsaving post:', error),
     });
   }
 
@@ -167,12 +160,10 @@ export class PostFlowComponent implements OnInit {
     const baseUrl = window.location.href.replace('/home', '');
     const url = `${baseUrl}/post/${postId}`;
     this.clipboard.copy(url);
-    
-    // Show popup for specific post
+
     this.copiedPostId = postId;
     this.showCopyPopup = true;
 
-    // Hide popup after 2 seconds
     setTimeout(() => {
       this.showCopyPopup = false;
       this.copiedPostId = null;

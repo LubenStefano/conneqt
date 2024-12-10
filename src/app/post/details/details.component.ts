@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component'; 
+import { UserBadgeComponent } from '../../shared/user-badge/user-badge.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { Post } from '../../types/post';
 import { PostService } from '../post.service';
@@ -12,7 +12,6 @@ import {
 import { faEllipsisH } from '@fortawesome/free-solid-svg-icons';
 import { User } from '../../types/user';
 import { map, switchMap, tap } from 'rxjs';
-import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Comment } from '../../types/comment';
@@ -57,9 +56,8 @@ export class DetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private postService: PostService,
     private userService: UserService,
-    private clipboard: Clipboard,
     private errorHandler: ErrorHandlerService
-  ) {}
+  ) { }
 
   isAuthenticated = false;
   ngOnInit(): void {
@@ -94,16 +92,16 @@ export class DetailsComponent implements OnInit {
           this.isAuthenticated = !!user;
           this.user = user
             ? {
-                uid: user.uid,
-                username: user.displayName || 'Unknown User',
-                userPfp: user.photoURL || '',
-                savedPosts: Array.isArray((user as any).savedPosts)
-                  ? (user as any).savedPosts
-                  : [],
-                displayName: user.displayName || undefined,
-                photoURL: user.photoURL || undefined,
-                email: user.email || undefined,
-              }
+              uid: user.uid,
+              username: user.displayName || 'Unknown User',
+              userPfp: user.photoURL || '',
+              savedPosts: Array.isArray((user as any).savedPosts)
+                ? (user as any).savedPosts
+                : [],
+              displayName: user.displayName || undefined,
+              photoURL: user.photoURL || undefined,
+              email: user.email || undefined,
+            }
             : null;
         }),
         switchMap(() => post$)
@@ -111,7 +109,6 @@ export class DetailsComponent implements OnInit {
       .subscribe({
         next: (post) => {
           this.post = post;
-          console.log('Post loaded:', this.post);
         },
         error: (error) => {
           console.error('Error loading data:', error);
@@ -124,7 +121,6 @@ export class DetailsComponent implements OnInit {
     comments$.subscribe({
       next: (comments: Comment[]) => {
         this.comments = comments; // Correctly typed as Comment[]
-        console.log('Comments loaded:', this.comments);
       },
       error: (error: any) => {
         console.error('Error loading comments:', error);
@@ -133,32 +129,27 @@ export class DetailsComponent implements OnInit {
     });
   }
   likePost(id: string) {
-    console.log('Like post:', id);
-
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to like posts');
       return;
     }
 
-    const post = this.post; // Използваме текущия пост
+    const post = this.post;
     if (!post || !post.likes) return;
 
     this.prevLikedState = this.isLiked(post);
     if (!this.prevLikedState) {
-      this.likeBubbles[id] = true; // Анимация за лайк
+      this.likeBubbles[id] = true;
     }
 
     this.postService.likePost(id, this.user.uid).subscribe({
       next: () => {
         if (this.prevLikedState) {
-          // Премахваме лайка, ако е бил наличен
           post.likes = post.likes.filter((uid) => uid !== this.user!.uid);
         } else {
-          // Добавяме лайка
           post.likes = post.likes || [];
           post.likes.push(this.user!.uid);
           setTimeout(() => {
-            this.likeBubbles[id] = false; // Спиране на анимацията
+            this.likeBubbles[id] = false;
           }, 800);
         }
       },
@@ -168,27 +159,24 @@ export class DetailsComponent implements OnInit {
 
   savePost(postId: string) {
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to save posts');
       return;
     }
 
-    const isSaved = this.isSaved(postId); // Проверка дали е запазен
+    const isSaved = this.isSaved(postId);
     this.prevSavedState = isSaved;
 
     const saveAction$ = isSaved
-      ? this.userService.unsavePost(this.user.uid, postId) // Премахване на запазен пост
-      : this.userService.savePost(this.user.uid, postId); // Запазване на поста
+      ? this.userService.unsavePost(this.user.uid, postId)
+      : this.userService.savePost(this.user.uid, postId);
 
     saveAction$.subscribe({
       next: () => {
         if (this.user) {
           if (isSaved) {
-            // Ако е бил запазен, го премахваме от списъка
             this.user.savedPosts = this.user.savedPosts.filter(
               (id) => id !== postId
             );
           } else {
-            // Добавяме към списъка на запазените
             this.user.savedPosts = [...(this.user.savedPosts || []), postId];
           }
         }
@@ -204,7 +192,7 @@ export class DetailsComponent implements OnInit {
   }
   isSaved(postId: string): boolean {
     if (!this.isAuthenticated || !this.user) return false;
-    return this.user.savedPosts?.includes(postId) ?? false; // Проверка дали постът е запазен
+    return this.user.savedPosts?.includes(postId) ?? false;
   }
 
   deletePost(postId: string) {
@@ -221,28 +209,27 @@ export class DetailsComponent implements OnInit {
 
   sharePost(postId: string) {
     const url = `${window.location.href}`; // Generate the full link
-    navigator.clipboard.writeText(url).then(() => {
-        // Show confirmation popup
+    navigator.clipboard
+      .writeText(url)
+      .then(() => {
         this.copiedPostId = postId;
         this.showCopyPopup = true;
 
-        // Hide the popup after 2 seconds
         setTimeout(() => {
-            this.showCopyPopup = false;
-            this.copiedPostId = null;
+          this.showCopyPopup = false;
+          this.copiedPostId = null;
         }, 2000);
-    }).catch(err => {
+      })
+      .catch((err) => {
         console.error('Failed to copy: ', err);
-    });
-}
+      });
+  }
   comment(form: NgForm) {
     const postId = this.post?._id;
     const content = form.value.commentContent;
     const userId = this.user?.uid;
     const userPfp = this.user?.userPfp;
     const displayName = this.user?.displayName;
-
-    console.log('Comment:', content);
 
     if (!postId) {
       console.error('Post ID is null or undefined');
@@ -269,7 +256,6 @@ export class DetailsComponent implements OnInit {
       .addComment(postId, content, userId, displayName, userPfp)
       .subscribe({
         next: (comment) => {
-          console.log('Comment added:', comment);
           form.resetForm();
         },
         error: (error) => this.errorHandler.showError(error),
@@ -278,7 +264,6 @@ export class DetailsComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    // Check if click is outside options menu
     const target = event.target as HTMLElement;
     if (!target.closest('.options-menu') && !target.closest('#faEllipsisH')) {
       this.closeOptionsMenu();

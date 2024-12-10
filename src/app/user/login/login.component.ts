@@ -51,7 +51,7 @@ export class LoginComponent {
       },
       error: (err: any) => {
         let errorMessage = 'An unknown error occurred. Please try again later.';
-        
+
         if (err.message) {
           switch (err.message) {
             case 'auth/invalid-credential':
@@ -67,7 +67,8 @@ export class LoginComponent {
               errorMessage = 'Wrong password.';
               break;
             case 'auth/email-already-in-use':
-              errorMessage = 'The email address is already in use by another account.';
+              errorMessage =
+                'The email address is already in use by another account.';
               break;
             case 'auth/operation-not-allowed':
               errorMessage = 'Operation not allowed. Please contact support.';

@@ -17,16 +17,16 @@ import { profileGuard } from './guards/profile.guard';
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  {path: 'login', component: LoginComponent, canActivate: [notAuthGuard]},
-  {path: 'register', component: RegisterComponent, canActivate: [notAuthGuard]},
-  {path: 'profile/:id', component: ProfileComponent,canActivate: [authGuard]},
-  {path: 'profile/:id/edit', component: EditProfileComponent, canActivate: [authGuard, profileGuard]},
-  {path: 'post/:id', component: DetailsComponent, canActivate: [authGuard]},
-  {path: 'post/:id/edit', component: EditPostComponent, canActivate: [authGuard, postCreatorGuard]},
+  { path: 'login', component: LoginComponent, canActivate: [notAuthGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [notAuthGuard] },
+  { path: 'profile/:id', component: ProfileComponent, canActivate: [authGuard] },
+  { path: 'profile/:id/edit', component: EditProfileComponent, canActivate: [authGuard, profileGuard] },
+  { path: 'post/:id', component: DetailsComponent, canActivate: [authGuard] },
+  { path: 'post/:id/edit', component: EditPostComponent, canActivate: [authGuard, postCreatorGuard] },
   {
     path: 'post/:postId/comment/:commentId/edit',
     component: EditCommentComponent,
     canActivate: [authGuard, commentCreatorGuard]
   },
-  {path: '**', component: ErrorPageComponent}
+  { path: '**', component: ErrorPageComponent }
 ];

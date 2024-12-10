@@ -1,12 +1,11 @@
 <main>
-  <section id="main-flow" [ngClass]="{'margin-top': isAuthenticated}" >
+  <section id="main-flow" [ngClass]="{ 'margin-top': isAuthenticated }">
     @if (!isAuthenticated) {
-      <div class="auth-prompt" routerLink="/login">
-        <p>Login to interact with posts</p>
-      </div>
-    }
-    @for (post of posts; track post._id) {
-      <app-post-box
+    <div class="auth-prompt" routerLink="/login">
+      <p>Login to interact with posts</p>
+    </div>
+    } @for (post of posts; track post._id) {
+    <app-post-box
       [post]="post"
       [user]="user"
       [isAuthenticated]="isAuthenticated"

@@ -8,8 +8,6 @@
       <div class="login-form">
         <form #form="ngForm" (ngSubmit)="login(form)">
           <div class="input-box">
-
-           
             <label for="email">Email</label>
             <input
               type="email"
@@ -21,7 +19,6 @@
               #email="ngModel"
             />
 
-           
             <label for="password">Password</label>
             <input
               type="password"
@@ -38,9 +35,7 @@
               <span><a routerLink="/register">Register now</a></span>
             </p>
 
-            <button type="submit" id="login-button">
-              Login
-            </button>
+            <button type="submit" id="login-button">Login</button>
           </div>
         </form>
       </div>

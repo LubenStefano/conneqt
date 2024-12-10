@@ -1,10 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, where, query, getDocs, orderBy, docData, deleteDoc } from '@angular/fire/firestore';
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+import {
+  Firestore,
+  collection,
+  collectionData,
+  addDoc,
+  doc,
+  where,
+  query,
+  getDocs,
+  orderBy,
+  docData,
+  deleteDoc,
+} from '@angular/fire/firestore';
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL,
+} from 'firebase/storage';
 import { catchError, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { combineLatest, from, Observable, of, throwError } from 'rxjs';
 import { Post } from '../types/post';
-import { arrayRemove, arrayUnion, deleteField, limit, updateDoc } from 'firebase/firestore';
+import {
+  arrayRemove,
+  arrayUnion,
+  deleteField,
+  limit,
+  updateDoc,
+} from 'firebase/firestore';
 import { Comment } from '../types/comment';
 import { UserService } from '../user/user.service';
 
@@ -18,8 +41,8 @@ export class PostService {
     const postsCollection = collection(this.firestore, 'post');
     const postsQuery = query(
       postsCollection,
-      orderBy('createdAt', 'desc'),  // Order by 'createdAt' in descending order (newest first)
-      limit(100)  // Limit the results to 100 posts
+      orderBy('createdAt', 'desc'),
+      limit(100)
     );
     return collectionData(postsQuery, { idField: '_id' }).pipe(
       map((posts) => posts as Post[])
@@ -45,7 +68,7 @@ export class PostService {
 
       return from(uploadString(storageRef, base64Image, 'data_url')).pipe(
         switchMap(() => getDownloadURL(storageRef)),
-        catchError(error => {
+        catchError((error) => {
           console.error('Upload failed:', error);
           return throwError(() => new Error('Failed to upload image'));
         })
@@ -56,11 +79,15 @@ export class PostService {
     }
   }
 
-  createPost(content: string, creatorId: string, img?: string): Observable<Post> {
+  createPost(
+    content: string,
+    creatorId: string,
+    img?: string
+  ): Observable<Post> {
     const postsCollection = collection(this.firestore, 'post');
     const creatorDocRef = doc(this.firestore, `users/${creatorId}`);
     const date = this.formatDate(new Date());
-  
+
     const newPost: Post = {
       content,
       creator: creatorDocRef,
@@ -69,38 +96,39 @@ export class PostService {
       createdAt: new Date(),
       _id: '',
       uid: creatorId,
-      commentAmount: 0, // Initialize to 0
+      commentAmount: 0,
     };
-  
+
     if (img) {
       newPost.img = img;
     }
-  
+
     return from(addDoc(postsCollection, newPost)).pipe(
-      tap((docRef) => {
-        console.log('Post created successfully with ID:', docRef.id);
-      }),
       map((docRef) => ({
         ...newPost,
         _id: docRef.id,
       }))
     );
   }
-  updatePost(postId: string, content: string, img?: string | null): Observable<void> {
+  updatePost(
+    postId: string,
+    content: string,
+    img?: string | null
+  ): Observable<void> {
     const postRef = doc(this.firestore, `post/${postId}`);
     const updateData: Partial<Post> = { content };
-    
+
     if (img === null) {
-      // Remove image field from post
-      return from(updateDoc(postRef, { 
-        content,
-        img: deleteField() 
-      }));
+      return from(
+        updateDoc(postRef, {
+          content,
+          img: deleteField(),
+        })
+      );
     } else if (img !== undefined) {
-      // Update with new image
       updateData.img = img;
     }
-    
+
     return from(updateDoc(postRef, updateData));
   }
 
@@ -112,7 +140,10 @@ export class PostService {
   getPostsByUser(userId: string): Observable<Post[]> {
     const postsCollection = collection(this.firestore, 'post');
     const userDocRef = doc(this.firestore, `users/${userId}`);
-    const postsQuery = query(postsCollection, where('creator', '==', userDocRef));
+    const postsQuery = query(
+      postsCollection,
+      where('creator', '==', userDocRef)
+    );
 
     return new Observable<Post[]>((observer) => {
       getDocs(postsQuery)
@@ -137,14 +168,14 @@ export class PostService {
   getPostById(postId: string): Observable<Post> {
     const postRef = doc(this.firestore, `post/${postId}`);
     return docData(postRef, { idField: '_id' }).pipe(
-      take(1), // Automatically complete after receiving the first value
+      take(1),
       map((post) => {
         if (!post) {
           throw new Error('Post not found');
         }
         return {
           ...post,
-          _id: postId, // Ensure the _id is set correctly
+          _id: postId,
         } as Post;
       }),
       catchError((error) => {
@@ -161,64 +192,71 @@ export class PostService {
         const likes = postData?.likes || [];
 
         if (likes.includes(userId)) {
-          // User already liked the post, remove their ID
           return from(updateDoc(postRef, { likes: arrayRemove(userId) }));
         } else {
-          // User has not liked the post, add their ID
           return from(updateDoc(postRef, { likes: arrayUnion(userId) }));
         }
       }),
       catchError((error) => {
         console.error('Error updating likes:', error);
-        throw error; // Ensure errors are properly propagated
+        throw error;
       })
     );
   }
 
   getSavedPosts(savedPostIds: string[]): Observable<Post[]> {
     if (!savedPostIds || savedPostIds.length === 0) {
-      return of([]); // Return empty array if no saved posts
+      return of([]);
     }
-  
-    const posts: Observable<Post>[] = savedPostIds.map(postId => {
+
+    const posts: Observable<Post>[] = savedPostIds.map((postId) => {
       return this.getPost(postId).pipe(
-        filter(post => post !== null),
-        switchMap(post => {
+        filter((post) => post !== null),
+        switchMap((post) => {
           return this.userService.getUserByReference(post.creator).pipe(
-            map(user => ({
+            map((user) => ({
               ...post,
-              creatorName: user.displayName, // Attach the creator's displayName to the post
-              creatorPfp: user.photoURL, // Attach the creator's photoURL to the post
-              uid: user.uid // Attach the creator's uid to the post
+              creatorName: user.displayName,
+              creatorPfp: user.photoURL,
+              uid: user.uid,
             }))
           );
         })
       );
     });
-  
+
     return combineLatest(posts).pipe(
-      map(posts => posts.filter(post => post !== null)) // Remove null posts
+      map((posts) => posts.filter((post) => post !== null))
     );
   }
-  
-  addComment(postId: string, content: string, userId: string, displayName: string, userPfp: string): Observable<Comment> {
-    const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
+
+  addComment(
+    postId: string,
+    content: string,
+    userId: string,
+    displayName: string,
+    userPfp: string
+  ): Observable<Comment> {
+    const postCommentsCollection = collection(
+      this.firestore,
+      `post/${postId}/comments`
+    );
     const date = this.formatDate(new Date());
     const creatorRef = doc(this.firestore, `users/${userId}`);
-  
+
     const commentData = {
       _id: '',
       content: content,
-      creator: creatorRef,  // Store only the reference
+      creator: creatorRef,
       uid: userId,
       createdAt: new Date(),
       date: date,
     };
-  
+
     return from(addDoc(postCommentsCollection, commentData)).pipe(
       switchMap((docRef) => {
         return this.getComments(postId).pipe(
-          tap(comments => {
+          tap((comments) => {
             const commentAmount = comments.length;
             this.updateCommentAmount(postId, commentAmount).subscribe();
           }),
@@ -230,38 +268,54 @@ export class PostService {
       })
     );
   }
-deleteComment(postId: string, commentId: string): Observable<void> {
-  const postCommentRef = doc(this.firestore, `post/${postId}/comments/${commentId}`);
-  return from(deleteDoc(postCommentRef));
-}
-updateComment(postId: string, commentId: string, content: string): Observable<void> {
-  const commentRef = doc(this.firestore, `post/${postId}/comments/${commentId}`);
-  return from(updateDoc(commentRef, { content }));
-}
-getComments(postId: string): Observable<Comment[]> {
-  const postCommentsCollection = collection(this.firestore, `post/${postId}/comments`);
-  const postCommentsQuery = query(postCommentsCollection, orderBy('createdAt', 'desc'));
+  deleteComment(postId: string, commentId: string): Observable<void> {
+    const postCommentRef = doc(
+      this.firestore,
+      `post/${postId}/comments/${commentId}`
+    );
+    return from(deleteDoc(postCommentRef));
+  }
+  updateComment(
+    postId: string,
+    commentId: string,
+    content: string
+  ): Observable<void> {
+    const commentRef = doc(
+      this.firestore,
+      `post/${postId}/comments/${commentId}`
+    );
+    return from(updateDoc(commentRef, { content }));
+  }
+  getComments(postId: string): Observable<Comment[]> {
+    const postCommentsCollection = collection(
+      this.firestore,
+      `post/${postId}/comments`
+    );
+    const postCommentsQuery = query(
+      postCommentsCollection,
+      orderBy('createdAt', 'desc')
+    );
 
-  return collectionData(postCommentsQuery, { idField: '_id' }).pipe(
-    switchMap((comments: any[]) => {
-      const commentWithUserData = comments.map(comment => 
-        this.userService.getUserByReference(comment.creator).pipe(
-          map(user => ({
-            ...comment,
-            createdAt: comment.createdAt.toDate(),
-            _id: comment._id || '',
-            displayName: user.displayName || 'Unknown User',
-            userPfp: user.photoURL || ''
-          }))
-        )
-      );
-      return combineLatest(commentWithUserData);
-    }),
-    tap((comments: Comment[]) => {
-      this.updateCommentAmount(postId, comments.length).subscribe();
-    })
-  );
-}
+    return collectionData(postCommentsQuery, { idField: '_id' }).pipe(
+      switchMap((comments: any[]) => {
+        const commentWithUserData = comments.map((comment) =>
+          this.userService.getUserByReference(comment.creator).pipe(
+            map((user) => ({
+              ...comment,
+              createdAt: comment.createdAt.toDate(),
+              _id: comment._id || '',
+              displayName: user.displayName || 'Unknown User',
+              userPfp: user.photoURL || '',
+            }))
+          )
+        );
+        return combineLatest(commentWithUserData);
+      }),
+      tap((comments: Comment[]) => {
+        this.updateCommentAmount(postId, comments.length).subscribe();
+      })
+    );
+  }
 
   formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');

@@ -21,6 +21,6 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()), // Add this to configure Firestore
+    provideFirestore(() => getFirestore()), 
   ],
 };

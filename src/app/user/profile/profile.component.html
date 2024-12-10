@@ -7,7 +7,9 @@
         id="user-info-profile"
       ></app-user-badge>
       @if(userProfile){
-      <button class="edit-profile" routerLink="/profile/{{user?.uid}}/edit">edit</button>
+      <button class="edit-profile" routerLink="/profile/{{ user?.uid }}/edit">
+        edit
+      </button>
       }
     </div>
 
@@ -27,7 +29,7 @@
       >
         saved
       </span>
-    }
+      }
     </div>
 
     <hr />
@@ -42,7 +44,7 @@
       } @else {
       <div class="flow">
         @for (post of posts; track post._id) {
-          <app-post-box
+        <app-post-box
           id="profile-post"
           [post]="post"
           [user]="user"

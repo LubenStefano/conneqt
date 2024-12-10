@@ -33,13 +33,16 @@
           </textarea>
           <div class="cp-buttons">
             <div>
-            <button type="button" (click)="fileInput.click()">
-              <fa-icon
-              [ngClass]="{'image-icon-selected': selectedImage, 'image-icon': !selectedImage}"
-                [icon]="faImage"
-                class="image-icon icon-interactive"
-              ></fa-icon>
-            </button>
+              <button type="button" (click)="fileInput.click()">
+                <fa-icon
+                  [ngClass]="{
+                    'image-icon-selected': selectedImage,
+                    'image-icon': !selectedImage
+                  }"
+                  [icon]="faImage"
+                  class="image-icon icon-interactive"
+                ></fa-icon>
+              </button>
             </div>
             <button type="submit">
               <fa-icon

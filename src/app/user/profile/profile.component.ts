@@ -12,7 +12,15 @@ import { PostService } from '../../post/post.service';
 import { Post } from '../../types/post';
 import { User } from '../../types/user';
 import { FlowHighlightDirective } from './flow-option-highlight.directive';
-import { Subscription, switchMap, tap, of, Observable, map, forkJoin } from 'rxjs';
+import {
+  Subscription,
+  switchMap,
+  tap,
+  of,
+  Observable,
+  map,
+  forkJoin,
+} from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostBoxComponent } from '../../shared/post-box/post-box.component';
@@ -68,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.routeSub = this.route.params.subscribe(params => {
+    this.routeSub = this.route.params.subscribe((params) => {
       this.userId = params['id'];
       this.resetUserProfile();
       this.resetFlow();
@@ -82,7 +90,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       console.error('User ID is null');
       return;
     }
-  
+
     const user$ = this.userService.getUserById(userId).pipe(
       tap((user) => {
         this.isAuthenticated = !!user;
@@ -111,12 +119,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
         if (!user) return of([]);
         this.isLoading = true;
         this.isEmpty = false;
-  
+
         const posts$ =
           this.flow === 'posts'
             ? this.postService.getPostsByUser(user.uid)
             : this.postService.getSavedPosts(this.user?.savedPosts || []);
-  
+
         return posts$.pipe(
           switchMap((posts) => {
             const updatedPosts$ = posts.map((post) =>
@@ -130,14 +138,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 }))
               )
             );
-            return updatedPosts$.length
-              ? forkJoin(updatedPosts$)
-              : of([]);
+            return updatedPosts$.length ? forkJoin(updatedPosts$) : of([]);
           })
         );
       })
     );
-  
+
     this.subscription.add(
       user$.subscribe({
         next: (posts) => {
@@ -156,21 +162,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
       })
     );
   }
-  
 
   postFlow() {
     this.flow = 'posts';
-    this.loadUserData(); // Refresh posts
+    this.loadUserData();
   }
 
   postSaved() {
     this.flow = 'saved';
-    this.loadUserData(); // Refresh posts
+    this.loadUserData();
   }
 
   likePost(id: string) {
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to like posts');
       return;
     }
 
@@ -201,7 +205,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   savePost(postId: string) {
     if (!this.isAuthenticated || !this.user) {
-      console.log('Please login to save posts');
       return;
     }
 
@@ -246,12 +249,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     const baseUrl = window.location.href.replace(/\/profile\/.*$/, '');
     const url = `${baseUrl}/post/${postId}`;
     this.clipboard.copy(url);
-    
-    // Show popup for specific post
+
     this.copiedPostId = postId;
     this.showCopyPopup = true;
 
-    // Hide popup after 2 seconds
     setTimeout(() => {
       this.showCopyPopup = false;
       this.copiedPostId = null;
@@ -295,8 +296,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  editPost(postId: string) {
-    console.log('Edit post:', postId);
+  editPost() {
     this.closeOptionsMenu();
   }
 
