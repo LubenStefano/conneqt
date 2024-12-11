@@ -56,7 +56,7 @@
 ### **Steps to Clone and Run**  
 1. Clone the repository:  
    ```bash  
-   git clone https://github.com/your-username/conneqt.git  
+   git clone https://github.com/LubenStefano/conneqt.git
    ```  
 
 2. Navigate to the project directory:  
