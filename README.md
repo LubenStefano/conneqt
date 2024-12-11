@@ -91,7 +91,8 @@ Click the "Save" button on posts to add them to your saved posts list, accessibl
 
 ---
 
-## **Deploy in github pages**  
+## **Deploy in github pages** 
+(Install the package: ```npm install -g angular-cli-ghpages```)
 ```
 ng build --output-path=dist --base-href="/conneqt/"
 ngh --dir=dist
