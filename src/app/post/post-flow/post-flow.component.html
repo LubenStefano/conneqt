@@ -1,24 +1,26 @@
 <main>
   <section id="main-flow" [ngClass]="{ 'margin-top': isAuthenticated }">
+    @if(loading){
+    <div class="loader"></div>
+    }@else {
     @if (!isAuthenticated) {
     <div class="auth-prompt" routerLink="/login">
       <p>Login to interact with posts</p>
     </div>
-    } @for (post of posts; track post._id) {
-    <app-post-box
-      [post]="post"
-      [user]="user"
-      [isAuthenticated]="isAuthenticated"
-      [likeBubbles]="likeBubbles"
-      [prevLikedState]="prevLikedState"
-      [prevSavedState]="prevSavedState"
-      [showCopyPopup]="showCopyPopup"
-      [copiedPostId]="copiedPostId"
-      [showEllipsisMenu]="false"
-      (likePost)="likePost($event)"
-      (savePost)="savePost($event)"
-      (sharePost)="sharePost($event)"
-    ></app-post-box>
+    }
+    @if(posts.length === 0) {
+    <div class="no-posts">
+      <p>No posts to show</p>
+    </div>
+    }
+    @else {
+    @for (post of posts; track post._id) {
+    <app-post-box [post]="post" [user]="user" [isAuthenticated]="isAuthenticated" [likeBubbles]="likeBubbles"
+      [prevLikedState]="prevLikedState" [prevSavedState]="prevSavedState" [showCopyPopup]="showCopyPopup"
+      [copiedPostId]="copiedPostId" [showEllipsisMenu]="false" (likePost)="likePost($event)"
+      (savePost)="savePost($event)" (sharePost)="sharePost($event)"></app-post-box>
+    }
+    }
     }
   </section>
 </main>

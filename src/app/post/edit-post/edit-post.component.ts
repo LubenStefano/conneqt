@@ -161,7 +161,11 @@ export class EditPostComponent implements OnInit {
         )
         .subscribe({
           next: () => {
-            this.router.navigate(['/profile']);
+            if (this.user?.uid) {
+              this.router.navigate(['/profile', this.user.uid]);
+            } else {
+              console.error('User ID is undefined');
+            }
           },
           error: (error) => {
             console.error('Error updating post:', error);

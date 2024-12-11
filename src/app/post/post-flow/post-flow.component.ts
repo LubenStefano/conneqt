@@ -29,6 +29,8 @@ export class PostFlowComponent implements OnInit {
   showCopyPopup = false;
   copiedPostId: string | null = null;
 
+  loading = true;
+
   constructor(
     private postService: PostService,
     private userService: UserService,
@@ -80,10 +82,12 @@ export class PostFlowComponent implements OnInit {
     combineLatest([posts$, user$]).subscribe({
       next: ([posts, _]) => {
         this.posts = posts;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error loading data:', error);
         this.posts = [];
+        this.loading = false;
       },
     });
   }

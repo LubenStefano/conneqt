@@ -15,7 +15,6 @@ import {
   docData,
   DocumentReference,
   Firestore,
-  getDoc,
   setDoc,
   updateDoc,
 } from '@angular/fire/firestore';
@@ -66,7 +65,7 @@ export class UserService {
       }),
       catchError((error) => {
         console.error('Error during registration:', error);
-        throw new Error('Registration failed');
+        throw new Error(error.code);
       })
     );
   }

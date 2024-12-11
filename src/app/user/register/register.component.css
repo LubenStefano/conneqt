@@ -3,6 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 90vh;
+  margin-top: 120px;
 }
 
 .register-header {
@@ -170,7 +171,7 @@
   }
   .register-box {
     width: 90%;
-    margin-top: 250px;
+    margin-top: 65px;
   }
 
   .register-header h1 {

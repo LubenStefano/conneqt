@@ -34,7 +34,7 @@ export class RegisterComponent {
         return;
       }
       if (!form.value.email.match(this.regExp)) {
-        this.errorHandler.showError('Email is invalid');
+        this.errorHandler.showError('Email format is invalid');
         return;
       }
       if (form.value.password === '') {
@@ -71,8 +71,8 @@ export class RegisterComponent {
       },
       error: (err: any) => {
         let errorMessage = 'Error occurred during registration';
-        if (err.code) {
-          switch (err.code) {
+        if (err.message) {
+          switch (err.message) {
             case 'auth/email-already-in-use':
               errorMessage =
                 'The email address is already in use by another account.';
