@@ -8,8 +8,7 @@
 3. [Technologies Used](#technologies-used)  
 4. [Setup and Installation](#setup-and-installation)  
 5. [Usage](#usage)  
-6. [Database Structure](#database-structure)  
-7. [Deploy in github pages](#Deploy-in-github-pages)  
+6. [Deploy in github pages](#Deploy-in-github-pages)  
 
 
 ---
@@ -82,43 +81,13 @@
 ## **Usage**  
 
 ### **Homepage**  
-The homepage features trending posts, a search bar, and user-specific recommendations.  
+The homepage features trending posts, the functionality to post and interact with posts.  
 
 ### **Profile Management**  
 Authenticated users can update their profile picture using the image cropper and customize other personal details.  
 
 ### **Saving Posts**  
 Click the "Save" button on posts to add them to your saved posts list, accessible via the profile page.  
-
----
-
-## **Database Structure**  
-
-### **Users Collection**  
-```json  
-{  
-  "users": {  
-    "userId": {  
-      "username": "exampleUser",  
-      "photoUrl": "http://example.com/photo.jpg",  
-      "savedPosts": ["postId1", "postId2"]  
-    }  
-  }  
-}  
-```  
-
-### **Posts Collection**  
-```json  
-{  
-  "posts": {  
-    "postId": {  
-      "content": "This is a sample post.",  
-      "authorId": "userId",  
-      "savedBy": ["userId1", "userId2"]  
-    }  
-  }  
-}  
-```  
 
 ---
 
@@ -140,8 +109,7 @@ ngh --dir=dist/browser
   Shared logic for API calls, data management, and authentication.  
 
 ### **Key Practices**  
-- Using Angular CLI for efficient module and component generation.  
+- Using Angular CLI for efficient component generation.  
 - Employing media queries in CSS for responsive design.  
-- Database indexing for performance optimization.  
 
 ---
