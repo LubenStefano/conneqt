@@ -48,7 +48,7 @@
 
 ### **Prerequisites**  
 1. Install [Node.js](https://nodejs.org/) (v14+ recommended).  
-2. Install [Angular CLI](https://angular.io/cli):  
+2. Install [Angular CLI](https://angular.dev/tools/cli):  
    ```bash  
    npm install -g @angular/cli  
    ```  
