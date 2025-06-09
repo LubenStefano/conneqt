@@ -3,18 +3,29 @@
 🚀 **Live Demo**: [Conneqt - Hosted on GitHub Pages](https://lubenstefano.github.io/conneqt/home)  
 
 ## **Table of Contents**  
-1. [Introduction](#introduction)  
-2. [Features](#features)  
-3. [Technologies Used](#technologies-used)  
-4. [Setup and Installation](#setup-and-installation)  
-5. [Usage](#usage)  
-6. [Deploy in github pages](#Deploy-in-github-pages)  
+1. [Introduction](#introduction)
+2. [Preview](#preview)
+3. [Features](#features)  
+4. [Technologies Used](#technologies-used)  
+5. [Setup and Installation](#setup-and-installation)  
+6. [Usage](#usage)  
+7. [Deploy in github pages](#Deploy-in-github-pages)  
 
 
 ---
 
 ## **Introduction**  
 **Conneqt** is a modern, scalable social networking platform built with Angular and Firebase. Inspired by platforms like Twitter, it allows users to interact with content, save posts, and engage in a connected online environment. Conneqt emphasizes speed, responsiveness, and user-centric design, offering a seamless experience across devices.  
+
+---
+
+## **Preview**  
+![image](https://github.com/user-attachments/assets/06c92dc3-1d52-4cf0-b53f-204c99fff524)
+
+![image](https://github.com/user-attachments/assets/8e996941-dfe4-4fb0-b81a-840e26bcf140)
+
+![image](https://github.com/user-attachments/assets/37fef0cb-6627-4aa9-948e-9f47a8e0fc2b)
+
 
 ---
 
